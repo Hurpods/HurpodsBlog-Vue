@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # hurpodsblog-vue
 
 ## Project setup
@@ -22,3 +23,6 @@ npm run lint
 
 ### Customize configuration
 See [Configuration Reference](https://cli.vuejs.org/config/).
+=======
+# HurpodsBlog-Vue
+>>>>>>> ebb5661f1c8e385fce965a45fb8786c363781416
