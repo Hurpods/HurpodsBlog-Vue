@@ -1,0 +1,37 @@
+<template>
+    <div class="auth-swipper">
+        <el-carousel height="200px" style="top: 35%">
+            <el-carousel-item>
+                <img src="@/assets/img/lunbo/1.png"/>
+            </el-carousel-item>
+            <el-carousel-item>
+                <img src="@/assets/img/lunbo/2.png"/>
+            </el-carousel-item>
+            <el-carousel-item>
+                <img src="@/assets/img/lunbo/3.png"/>
+            </el-carousel-item>
+            <el-carousel-item>
+                <img src="@/assets/img/lunbo/4.png"/>
+            </el-carousel-item>
+        </el-carousel>
+        <div style="position: relative;top: 40%;font-size: 20px;font-weight: bold;">
+            <span>本站点前端技术栈为Vue+Element UI+axios</span><br>
+            <span>后端技术栈为Spring Boot+My Batis</span>
+        </div>
+    </div>
+</template>
+
+<script>
+    export default {
+        name: "Auth"
+    }
+</script>
+
+<style scoped>
+    .auth-swipper {
+        width: 21%;
+        position: absolute;
+        height: 100%;
+        background-image: linear-gradient(135deg, rgb(26, 210, 253) 0%, rgb(0, 138, 255) 100%);
+    }
+</style>
