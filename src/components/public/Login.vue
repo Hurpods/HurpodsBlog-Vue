@@ -5,8 +5,8 @@
             <img src="@/assets/img/logo/black_64.png" alt="logo" style="vertical-align: middle"/>
             <span><a href="/">HurpodsBlog</a></span>
         </div>
-        <el-form class="login-container" label-width="80px" label-position="left" :rules="rules" size="medium"
-                 :model="loginForm">
+        <el-form class="login-container" label-width="80px" label-position="right" :rules="rules" size="medium"
+                 :model="loginForm" ref="loginForm">
             <el-form-item label="用户名" style="margin-top: 30px" prop="username">
                 <el-input type="text" v-model="loginForm.username" placeholder="请输入用户名" auto-complete="off"/>
             </el-form-item>
@@ -18,11 +18,11 @@
                     active-color="#13ce66"
                     inactive-color="lightseagreen"
                     active-text="记住密码"
-                    style="margin-bottom: 15px;width: fit-content;margin-left: -238px;"
+                    style="width: fit-content;margin-left: -238px;"
             >
             </el-switch>
             <el-form-item style="margin-left: -80px;margin-top: 15px">
-                <el-button type="primary" v-on:click="login" style="width: 100px">登录</el-button>
+                <el-button type="primary" v-on:click="login('loginForm')" style="width: 100px">登录</el-button>
             </el-form-item>
         </el-form>
     </div>
@@ -44,7 +44,7 @@
                 rules: {
                     username: [
                         {required: true, message: '请输入用户名', trigger: 'blur'},
-                        {min: 6, max: 20, message: '用户名长度在6-20个字符之间', trigger: 'change'},
+                        {required: true, min: 6, max: 20, message: '用户名长度在6-20个字符之间', trigger: 'change'},
                         {
                             required: true,
                             pattern: /^[a-zA-Z][a-zA-Z0-9]+$/,
@@ -54,7 +54,7 @@
                     ],
                     password: [
                         {required: true, message: '请输入密码', trigger: 'blur'},
-                        {min: 6, max: 22, message: '密码长度在6-22个字符之间', trigger: 'change'}
+                        {required: true, min: 6, max: 22, message: '密码长度在6-22个字符之间', trigger: 'change'}
                     ]
                 }
             }
@@ -63,27 +63,35 @@
             AuthSideSwipper
         },
         methods: {
-            login() {
-                let _this = this;
-                this.$axios.post('/login',
-                    this.$qs.stringify({
-                        username: this.loginForm.username,
-                        password: this.loginForm.password
-                    })
-                )
-                    .then(successResponse => {
-                        console.log(successResponse);
-                        if (successResponse.data.code === 200) {
-                            _this.$store.commit('login', _this.loginForm);
-                            let path = this.$route.query.redirect
-                            this.$router.replace({path: path === '/' || path === undefined ? '/index' : path})
-                        } else {
-                            this.$alert(successResponse.data.message, '提示');
-                        }
-                    })
-                    .catch(failResponse => {
-                        alert(failResponse);
-                    })
+            login(formName) {
+                this.$refs[formName].validate((valid) => {
+                    if (valid) {
+                        let _this = this;
+                        this.$axios.post('/login',
+                            this.$qs.stringify({
+                                username: this.loginForm.username,
+                                password: this.loginForm.password,
+                                rememberMe:this.value
+                            })
+                        )
+                            .then(successResponse => {
+                                console.log(successResponse);
+                                if (successResponse.data.code === 200) {
+                                    _this.$store.commit('login', _this.loginForm);
+                                    let path = this.$route.query.redirect
+                                    this.$router.replace({path: path === '/' || path === undefined ? '/index' : path})
+                                } else {
+                                    this.$alert(successResponse.data.message, '提示');
+                                }
+                            })
+                            .catch(failResponse => {
+                                _this.$alert(failResponse);
+                            });
+                    } else {
+                        this.$alert('请按照指示完成必填项！');
+                        return false;
+                    }
+                });
             }
         }
     }

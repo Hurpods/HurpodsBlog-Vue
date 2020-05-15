@@ -35,6 +35,22 @@ axios.defaults.withCredentials = true
 //     }
 // )
 
+Vue.prototype.myValidate = function defaultValidator(rule, value, callback, type) {
+    this.$axios
+        .post('/auth/validate',
+            this.$qs.stringify({
+                value: value,
+                type: type
+            })
+        ).then(resp => {
+        if (resp.data.code === 1) {
+            callback();
+        } else if (resp.data.code === 0) {
+            callback(new Error(resp.data.message))
+        }
+    });
+}
+
 new Vue({
     router,
     store,

@@ -5,8 +5,8 @@
             <img src="@/assets/img/logo/black_64.png" alt="logo" style="vertical-align: middle"/>
             <span><a href="/">HurpodsBlog</a></span>
         </div>
-        <el-form class="register-container" label-width="80px" label-position="left" :model="registerForm"
-                 :rules='rules'>
+        <el-form class="register-container" label-width="80px" label-position="right" :model="registerForm"
+                 :rules='rules' ref='registerForm'>
             <el-form-item style="margin-top: 30px" label="用户名" prop="username">
                 <el-input type="text" v-model="registerForm.username" placeholder="请输入用户名" auto-complete="off"/>
             </el-form-item>
@@ -23,7 +23,7 @@
                 <el-input type="text" v-model="registerForm.email" placeholder="请输入邮箱" auto-complete="off"/>
             </el-form-item>
             <el-form-item style="margin-left: -80px;margin-top: 30px;">
-                <el-button type="primary" style="width: 100px">注册</el-button>
+                <el-button type="primary" style="width: 100px" @click="register('registerForm')">注册</el-button>
             </el-form-item>
         </el-form>
     </div>
@@ -36,13 +36,13 @@
         name: "Register",
         data() {
             let validateUsername = (rule, value, callback) => {
-                defaultValidator(rule, value, callback)
+                this.myValidate(rule, value, callback, 'username')
             };
             let validateTelephone = (rule, value, callback) => {
-                defaultValidator(rule, value, callback)
+                this.myValidate(rule, value, callback, 'telephone')
             };
             let validateEmail = (rule, value, callback) => {
-                defaultValidator(rule, value, callback)
+                this.myValidate(rule, value, callback, 'email')
             };
             let validatePassword = (rule, value, callback) => {
                 if (value !== this.registerForm.password) {
@@ -69,7 +69,7 @@
                             message: '用户名仅由字母和数字组成，且仅以字母开头',
                             trigger: 'change'
                         },
-                        {validator: validateUsername, trigger: 'blur'}
+                        {required: true, validator: validateUsername, trigger: 'blur'}
                     ],
                     password: [
                         {required: true, message: '请输入密码', trigger: 'blur'},
@@ -80,45 +80,68 @@
                         {validator: validatePassword, trigger: 'change'}
                     ],
                     telephone: [
-                        {min: 11, max: 11, message: '手机号位数错误', trigger: 'change'},
+                        {required: false, min: 11, max: 11, message: '手机号码位数错误', trigger: 'change'},
                         {
                             required: false,
                             pattern: /^[1](([3|5|8][\\d])|([4][4,5,6,7,8,9])|([6][2,5,6,7])|([7][^9])|([9][1,8,9]))[\\d]{8}$/,
-                            message: '手机号格式错误',
+                            message: '手机号码格式错误',
                             trigger: 'change'
-                        }
+                        },
+                        {required: false, validator: validateTelephone, trigger: 'blur'}
                     ],
                     email: [
                         {required: true, message: '请输入邮箱地址', trigger: 'blur'},
                         {
                             required: true,
-                            pattern: /[a-zA-Z0-9_.-]+@[a-zA-Z0-9-]+(\\.[a-zA-Z0-9-]+)*\\.[a-zA-Z0-9]{2,6}/,
+                            pattern: /^[A-Za-z0-9]+@[a-zA-Z0-9_-]+(\.[a-zA-Z0-9_-]+)+$/,
                             message: '邮箱地址格式错误',
                             trigger: 'blur'
-                        }
+                        },
+                        {required: true, validator: validateEmail, trigger: 'blur'}
                     ]
                 }
             }
         },
         components: {
             AuthSideSwipper
+        },
+        methods: {
+            register(formName) {
+                this.$refs[formName].validate((valid) => {
+                    if (valid) {
+                        let _this = this;
+                        this.$axios
+                            .post('/auth/register',
+                                this.$qs.stringify({
+                                    username: this.registerForm.username,
+                                    password: this.registerForm.password,
+                                    rePassword: this.registerForm.rePassword,
+                                    telephone: this.registerForm.telephone,
+                                    email: this.registerForm.email
+                                })
+                            ).then(resp => {
+                            if (resp.data.code === 1) {
+                                this.$alert('注册' + resp.data.message, '提示', {
+                                    confirmButtonText: '确定'
+                                });
+                                _this.$router.replace('/login')
+                            } else {
+                                this.$alert(resp.data.message, '提示', {
+                                    confirmButtonText: '确定'
+                                })
+                            }
+                        }).catch(failResponse => {
+                            this.$alert(failResponse, '提示');
+                        })
+                    } else {
+                        this.$alert('请按照指示完成必填项！');
+                        return false;
+                    }
+                });
+            }
         }
     }
 
-    function defaultValidator(rule, value, callback) {
-        this.$axios
-            .post('/validate',
-                this.$qs.stringify({
-                    value: value
-                })
-            ).then(resp => {
-            if (resp.data.code === 1000) {
-                callback();
-            } else if (resp.data.code === 1001) {
-                callback(new Error(resp.data.message))
-            }
-        });
-    }
 </script>
 
 <style scoped>
