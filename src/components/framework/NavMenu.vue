@@ -59,9 +59,9 @@
             },
             isLogin() {
                 let _this = this;
-                if (sessionStorage.getItem('userName')) {
-                    this.$store.commit('userStatus', sessionStorage.getItem('userName'));
-                    _this.avatarUrl = sessionStorage.getItem("userAvatar");
+                if (localStorage.getItem('userName')) {
+                    this.$store.commit('userStatus', localStorage.getItem('userName'));
+                    _this.avatarUrl = localStorage.getItem("userAvatar");
                 }
                 return this.$store.getters.isLogin
             }

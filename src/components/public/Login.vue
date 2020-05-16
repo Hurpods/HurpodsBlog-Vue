@@ -67,30 +67,33 @@
                 this.$refs[formName].validate((valid) => {
                     if (valid) {
                         let _this = this;
-                        this.$axios.post('/auth/login',
-                            this.$qs.stringify({
+                        this.$axios.post(
+                            '/auth/login',
+                            {
                                 username: this.loginForm.username,
                                 password: this.loginForm.password,
                                 rememberMe: this.value
-                            })
+                            }
                         )
                             .then(successResponse => {
                                 if (successResponse.data.code === 1) {
-                                    this.$message.success(successResponse.data.message);
-                                    sessionStorage.setItem("userName", successResponse.data.data.userName);
-                                    sessionStorage.setItem("userAvatar", successResponse.data.data.userAvatar);
+                                    localStorage.setItem("userName", successResponse.data.data.username);
+                                    localStorage.setItem("userAvatar", successResponse.data.data.userAvatar);
+                                    localStorage.setItem("token", successResponse.headers.Authorization);
 
-                                    this.$store.dispatch('setUser', successResponse.data.data.userName);
+                                    this.$store.dispatch('setUser', successResponse.data.data.username);
                                     this.$store.dispatch('setAvatar', successResponse.data.data.userAvatar);
+                                    this.$store.dispatch('setToken', successResponse.headers.Authorization);
 
+                                    _this.$message.success("登录成功");
                                     let path = this.$route.query.redirect
                                     this.$router.replace({path: path === '/' || path === undefined ? '/' : path})
                                 } else {
-                                    this.$message.error(successResponse.data.message);
+                                    _this.$message.error(successResponse.data.message);
                                 }
                             })
                             .catch(failResponse => {
-                                _this.$message.error(failResponse);
+                                _this.$alert(failResponse);
                             });
                     } else {
                         this.$message.warning('请按照指示完成必填项！');
