@@ -121,20 +121,16 @@
                                 })
                             ).then(resp => {
                             if (resp.data.code === 1) {
-                                this.$alert('注册' + resp.data.message, '提示', {
-                                    confirmButtonText: '确定'
-                                });
+                                this.$message.success('注册成功');
                                 _this.$router.replace('/login')
                             } else {
-                                this.$alert(resp.data.message, '提示', {
-                                    confirmButtonText: '确定'
-                                })
+                                this.$message.warning(resp.data.message)
                             }
                         }).catch(failResponse => {
-                            this.$alert(failResponse, '提示');
+                            this.$message.error(failResponse);
                         })
                     } else {
-                        this.$alert('请按照指示完成必填项！');
+                        this.$message.warning('请按照指示完成必填项！');
                         return false;
                     }
                 });

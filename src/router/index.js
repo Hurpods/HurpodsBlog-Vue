@@ -6,27 +6,34 @@ import Register from "@/components/public/Register";
 
 Vue.use(VueRouter)
 
-  const routes = [
+const routes = [
     {
-      path: "/",
-      name: "Home",
-      component: Home
+        path: "/",
+        name: "Home",
+        component: Home
     },
     {
-      path: '/login',
-      name: 'Login',
-      component: Login
+        path: '/login',
+        name: 'Login',
+        component: Login
     },
     {
-      path: '/register',
-      name: 'Register',
-      component: Register
+        path: '/register',
+        name: 'Register',
+        component: Register
     }
 ]
 
 const router = new VueRouter({
-  mode: 'history',
-  routes
+    mode: 'history',
+    routes,
+    scrollBehavior(to, from, savedPosition) {
+        if (savedPosition) {
+            return savedPosition;
+        } else {
+            return {x: 0, y: 0}
+        }
+    }
 })
 
 export default router

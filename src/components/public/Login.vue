@@ -67,28 +67,33 @@
                 this.$refs[formName].validate((valid) => {
                     if (valid) {
                         let _this = this;
-                        this.$axios.post('/login',
+                        this.$axios.post('/auth/login',
                             this.$qs.stringify({
                                 username: this.loginForm.username,
                                 password: this.loginForm.password,
-                                rememberMe:this.value
+                                rememberMe: this.value
                             })
                         )
                             .then(successResponse => {
-                                console.log(successResponse);
-                                if (successResponse.data.code === 200) {
-                                    _this.$store.commit('login', _this.loginForm);
+                                if (successResponse.data.code === 1) {
+                                    this.$message.success(successResponse.data.message);
+                                    sessionStorage.setItem("userName", successResponse.data.data.userName);
+                                    sessionStorage.setItem("userAvatar", successResponse.data.data.userAvatar);
+
+                                    this.$store.dispatch('setUser', successResponse.data.data.userName);
+                                    this.$store.dispatch('setAvatar', successResponse.data.data.userAvatar);
+
                                     let path = this.$route.query.redirect
-                                    this.$router.replace({path: path === '/' || path === undefined ? '/index' : path})
+                                    this.$router.replace({path: path === '/' || path === undefined ? '/' : path})
                                 } else {
-                                    this.$alert(successResponse.data.message, '提示');
+                                    this.$message.error(successResponse.data.message);
                                 }
                             })
                             .catch(failResponse => {
-                                _this.$alert(failResponse);
+                                _this.$message.error(failResponse);
                             });
                     } else {
-                        this.$alert('请按照指示完成必填项！');
+                        this.$message.warning('请按照指示完成必填项！');
                         return false;
                     }
                 });
