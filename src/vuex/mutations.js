@@ -3,9 +3,9 @@ export const userStatus = (state, userName) => {
         state.currentUser = userName
         state.isLogin = true
     } else if (userName == null) {
-        localStorage.setItem('userName', null);
+        localStorage.removeItem("userName");
         localStorage.setItem('token', '');
-        localStorage.setItem('userAvatar', null);
+        localStorage.removeItem('userAvatar');
         state.currentUser = null;
         state.isLogin = false;
         state.token = '';

@@ -15,13 +15,15 @@
         <li>
             <span style="position: absolute;padding-top: 20px;right: 43%;font-size: 20px;font-weight: bold;cursor:default">HurpodsBlog——成长的道路</span>
         </li>
-        <el-submenu index="5" v-show="isLogin()" style="float:right">
+        <el-submenu index="avatar" v-show="isLogin()" style="float:right">
             <template slot="title" style="padding:15px;">
                 <el-avatar :size="45" :src="avatarUrl"></el-avatar>
             </template>
-            <el-menu-item v-for="(item,i) in baseCommand" :key="i" :index="item.index">
+            <el-menu-item v-for="(item,i) in baseCommand" :key="i" :index="item.index" style="text-align: center">
                 {{item.name}}
             </el-menu-item>
+            <el-menu-item :index='account' style="text-align: center">个人中心</el-menu-item>
+            <el-menu-item @click="logout" style="text-align: center">退出登录</el-menu-item>
         </el-submenu>
         <div class="loginUser" v-show="!isLogin()">
             <router-link to="/login">登录</router-link>
@@ -31,6 +33,7 @@
 
 <script>
     export default {
+        inject: ['reload'],
         name: "NavMenu",
         data() {
             return {
@@ -39,29 +42,23 @@
                     {index: '/talking', navItem: '碎碎念'},
                     {index: '/library', navItem: '图书馆'}
                 ],
-                baseCommand: [
-                    {index: '/account/profile', name: '个人中心'},
-                    {index: '/', name: '退出登录'}
-                ],
+                baseCommand: [],
                 activeIndex: '1',
-                avatarUrl: ""
+                avatarUrl: "",
+                account: ''
             }
         },
         methods: {
             logout() {
-                let _this = this;
-                this.$axios.get('/auth/logout').then(resp => {
-                    if (resp.data.code === 1) {
-                        this.$message.success(resp.data.message);
-                        _this.$router.replace('/');
-                    }
-                })
+                this.$store.commit('userStatus', null);
+                this.reload();
             },
             isLogin() {
                 let _this = this;
-                if (localStorage.getItem('userName')) {
+                if (localStorage.getItem('userName') !== 'null') {
                     this.$store.commit('userStatus', localStorage.getItem('userName'));
-                    _this.avatarUrl = localStorage.getItem("userAvatar");
+                    _this.avatarUrl = localStorage.getItem('userAvatar');
+                    _this.account = '/account/' + localStorage.getItem("userName");
                 }
                 return this.$store.getters.isLogin
             }

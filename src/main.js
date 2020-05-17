@@ -16,10 +16,11 @@ Vue.use(ElementUI);
 axios.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded';
 axios.defaults.baseURL = 'http://localhost:8090'
 axios.defaults.withCredentials = true
+axios.defaults.headers.common['Authorization'] = localStorage.getItem('token');
 
 router.beforeEach((to, from, next) => {
         if (to.meta.requireAuth) {
-            if (sessionStorage.getItem('userName')) {
+            if (localStorage.getItem('userName')) {
                 next();
             } else {
                 next({

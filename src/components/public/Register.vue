@@ -5,8 +5,15 @@
             <img src="@/assets/img/logo/black_64.png" alt="logo" style="vertical-align: middle"/>
             <span><a href="/">HurpodsBlog</a></span>
         </div>
-        <el-form class="register-container" label-width="80px" label-position="right" :model="registerForm"
-                 :rules='rules' ref='registerForm'>
+        <el-form
+                class="register-container"
+                label-width="80px"
+                label-position="right"
+                :model="registerForm"
+                :rules='rules'
+                ref='registerForm'
+                @keyup.enter.native="register('registerForm')"
+        >
             <el-form-item style="margin-top: 30px" label="用户名" prop="username">
                 <el-input type="text" v-model="registerForm.username" placeholder="请输入用户名" auto-complete="off"/>
             </el-form-item>
@@ -93,9 +100,9 @@
                         {required: true, message: '请输入邮箱地址', trigger: 'blur'},
                         {
                             required: true,
-                            pattern: /^[A-Za-z0-9]+@[a-zA-Z0-9_-]+(\.[a-zA-Z0-9_-]+)+$/,
+                            pattern: /^[A-Za-z1-9]+([-_.][A-Za-z1-9]+)*@([A-Za-z1-9]+[-.])+[A-Za-z]{2,5}$/,
                             message: '邮箱地址格式错误',
-                            trigger: 'blur'
+                            trigger: 'change'
                         },
                         {required: true, validator: validateEmail, trigger: 'blur'}
                     ]

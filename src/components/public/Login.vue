@@ -5,8 +5,15 @@
             <img src="@/assets/img/logo/black_64.png" alt="logo" style="vertical-align: middle"/>
             <span><a href="/">HurpodsBlog</a></span>
         </div>
-        <el-form class="login-container" label-width="80px" label-position="right" :rules="rules" size="medium"
-                 :model="loginForm" ref="loginForm">
+        <el-form
+                class="login-container"
+                label-width="80px"
+                label-position="right"
+                :rules="rules"
+                :model="loginForm"
+                ref="loginForm"
+                @keyup.enter.native="login('loginForm')"
+        >
             <el-form-item label="用户名" style="margin-top: 30px" prop="username">
                 <el-input type="text" v-model="loginForm.username" placeholder="请输入用户名" auto-complete="off"/>
             </el-form-item>
@@ -79,11 +86,11 @@
                                 if (successResponse.data.code === 1) {
                                     localStorage.setItem("userName", successResponse.data.data.username);
                                     localStorage.setItem("userAvatar", successResponse.data.data.userAvatar);
-                                    localStorage.setItem("token", successResponse.headers.Authorization);
+                                    localStorage.setItem("token", successResponse.headers.authorization);
 
                                     this.$store.dispatch('setUser', successResponse.data.data.username);
                                     this.$store.dispatch('setAvatar', successResponse.data.data.userAvatar);
-                                    this.$store.dispatch('setToken', successResponse.headers.Authorization);
+                                    this.$store.dispatch('setToken', successResponse.headers.authorization);
 
                                     _this.$message.success("登录成功");
                                     let path = this.$route.query.redirect
@@ -93,6 +100,7 @@
                                 }
                             })
                             .catch(failResponse => {
+                                console.log(failResponse)
                                 _this.$alert(failResponse);
                             });
                     } else {
@@ -100,6 +108,11 @@
                         return false;
                     }
                 });
+            }
+        },
+        beforeMount() {
+            if (localStorage.getItem('userName')) {
+                this.$router.replace("/");
             }
         }
     }
