@@ -19,10 +19,11 @@ axios.defaults.withCredentials = true
 axios.defaults.headers.common['Authorization'] = localStorage.getItem('token');
 
 router.beforeEach((to, from, next) => {
+        document.title = to.meta.title;
         if (to.meta.requireAuth) {
             if (localStorage.getItem('userName')) {
                 axios
-                    .post('/auth/authTime', {},{
+                    .post('/auth/authTime', {}, {
                         headers: {
                             'Authorization': localStorage.getItem('token')
                         }
@@ -40,7 +41,7 @@ router.beforeEach((to, from, next) => {
                         }
                     })
                     .catch(r => {
-                        ElementUI.Alert.error(r);
+                        ElementUI.Message.error(r);
                         store.commit('userStatus', null);
                         next({
                             path: '/login',

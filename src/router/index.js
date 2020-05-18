@@ -13,13 +13,17 @@ const routes = [
         path: '/',
         name: 'Home',
         component: Home,
+        meta: {
+            title: 'HurpodsBlog——成长的道路'
+        },
         children: [
             {
                 path: '/account/:username',
                 name: 'Profile',
                 component: Profile,
                 meta: {
-                    requireAuth: true
+                    requireAuth: true,
+                    title: '个人中心'
                 }
             },
             {
@@ -27,7 +31,8 @@ const routes = [
                 name: 'Update',
                 component: Update,
                 meta: {
-                    requireAuth: true
+                    requireAuth: true,
+                    title: '修改资料'
                 }
             }
         ]
@@ -35,12 +40,18 @@ const routes = [
     {
         path: '/login',
         name: 'Login',
-        component: Login
+        component: Login,
+        meta: {
+            title: '登录'
+        }
     },
     {
         path: '/register',
         name: 'Register',
-        component: Register
+        component: Register,
+        meta: {
+            title: '注册'
+        }
     }
 ]
 

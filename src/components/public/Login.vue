@@ -14,6 +14,9 @@
                 ref="loginForm"
                 @keyup.enter.native="login('loginForm')"
         >
+            <router-link to="/register" style="float: right;font-size: 14px;">
+                立即注册<i class="el-icon-arrow-right"></i>
+            </router-link>
             <el-form-item label="用户名" style="margin-top: 30px" prop="username">
                 <el-input type="text" v-model="loginForm.username" placeholder="请输入用户名" auto-complete="off"/>
             </el-form-item>

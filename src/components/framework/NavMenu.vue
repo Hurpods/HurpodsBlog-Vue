@@ -51,7 +51,7 @@
         methods: {
             logout() {
                 this.$store.commit('userStatus', null);
-                this.reload();
+                this.$router.go(0);
             },
             isLogin() {
                 let _this = this;

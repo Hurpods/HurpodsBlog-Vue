@@ -50,39 +50,56 @@
                 UID: '',
                 nickName: '',
                 registerTime: '',
-                locate:'',
-                role:''
+                locate: '',
+                role: ''
             }
         },
-        mounted() {
+        beforeCreate() {
             let username = this.$route.params.username;
             let _this = this;
             this.$axios
                 .get('/api/user/' + username)
                 .then(response => {
                     if (response.data.code === 1) {
-                        console.log(response);
                         _this.avatarUrl = response.data.data.userAvatar;
                         _this.updateUrl = '/account/update/' + username;
-                        _this.UID=response.data.data.userId;
-                        this.nickName=response.data.data.userNickName;
-                        this.registerTime=response.data.data.registerTime;
-                        this.locate=response.data.data.province+response.data.data.city;
-                        this.role=response.data.data.roles[0].roleDescription;
+                        _this.UID = response.data.data.userId;
+                        _this.nickName = response.data.data.userNickName;
+                        _this.registerTime = response.data.data.registerTime;
+                        _this.locate = response.data.data.userLocate;
+                        _this.role = response.data.data.roles[0].roleDescription;
                     }
                 })
         },
         methods: {
             deleteUser() {
+                let username = this.$route.params.username;
+                let _this = this;
                 this.$prompt('本操作为不可逆操作，如确认删除账号，请输入密码：', '警告', {
                     confirmButtonText: '确定',
                     cancelButtonText: '取消',
                     type: 'warning',
-                    inputPattern: /^([a-zA-Z0-9`~!@#$%^&*()_+<>?:"{},.\\/;'[\]]){8,22}$/,
+                    inputPattern: /^([a-zA-Z0-9`~!@#$%^&*()_+<>?:"{},.\\/;'[\]]){6,22}$/,
                     inputErrorMessage: '请输入正确密码！',
                     center: true
                 }).then(({value}) => {
-                    this.$message(value);
+                    _this.$axios
+                        .post('/api/deleteUser/' + username, {
+                            oldPassword: value
+                        })
+                        .then(r => {
+                            console.log(r);
+                            if (r.data.code === 1) {
+                                this.$message.success(r.data.data);
+                                _this.$store.commit('userStatus', null);
+                                _this.$router.replace('/');
+                            } else {
+                                this.$message.error(r.data.message + '错误：' + r.data.code);
+                            }
+                        })
+                        .catch(r => {
+                            this.$message(r);
+                        })
                 }).catch(() => {
                     this.$message("已取消操作");
                 })
@@ -140,7 +157,7 @@
     }
 
     .user-detail {
-        width: 15%;
+        width: 20%;
         position: relative;
         float: left;
         left: 21%;
