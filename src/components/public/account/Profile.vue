@@ -21,6 +21,10 @@
                     <span>{{nickName}}</span>
                     <el-divider content-position="left">注册时间</el-divider>
                     <span>{{registerTime}}</span>
+                    <el-divider content-position="left">地区</el-divider>
+                    <span>{{locate}}</span>
+                    <el-divider content-position="left">用户组</el-divider>
+                    <span>{{role}}</span>
                 </div>
             </el-collapse-transition>
 
@@ -43,9 +47,11 @@
                 updateUrl: '',
                 details: false,
                 showText: '详细资料',
-                UID: '2000',
-                nickName: '小老虎不做梦',
-                registerTime: '2020-5-17'
+                UID: '',
+                nickName: '',
+                registerTime: '',
+                locate:'',
+                role:''
             }
         },
         mounted() {
@@ -55,12 +61,15 @@
                 .get('/api/user/' + username)
                 .then(response => {
                     if (response.data.code === 1) {
+                        console.log(response);
                         _this.avatarUrl = response.data.data.userAvatar;
-                        _this.updateUrl = '/account/update/' + username
+                        _this.updateUrl = '/account/update/' + username;
+                        _this.UID=response.data.data.userId;
+                        this.nickName=response.data.data.userNickName;
+                        this.registerTime=response.data.data.registerTime;
+                        this.locate=response.data.data.province+response.data.data.city;
+                        this.role=response.data.data.roles[0].roleDescription;
                     }
-                })
-                .catch(r => {
-                    this.$alert(r);
                 })
         },
         methods: {

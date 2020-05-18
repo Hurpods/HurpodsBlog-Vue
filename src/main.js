@@ -21,10 +21,35 @@ axios.defaults.headers.common['Authorization'] = localStorage.getItem('token');
 router.beforeEach((to, from, next) => {
         if (to.meta.requireAuth) {
             if (localStorage.getItem('userName')) {
-                next();
+                axios
+                    .post('/auth/authTime', {},{
+                        headers: {
+                            'Authorization': localStorage.getItem('token')
+                        }
+                    })
+                    .then(resp => {
+                        if (resp.data.code === 1) {
+                            next();
+                        } else {
+                            ElementUI.Message.error(resp.data.message);
+                            store.commit('userStatus', null);
+                            next({
+                                path: '/login',
+                                query: {redirect: to.fullPath}
+                            })
+                        }
+                    })
+                    .catch(r => {
+                        ElementUI.Alert.error(r);
+                        store.commit('userStatus', null);
+                        next({
+                            path: '/login',
+                            query: {redirect: to.fullPath}
+                        })
+                    })
             } else {
                 next({
-                    path: 'login',
+                    path: '/login',
                     query: {redirect: to.fullPath}
                 })
             }

@@ -31,8 +31,10 @@
 
                     <el-form-item label="地区" prop="city">
                         <el-cascader
-                                :props="{ expandTrigger: 'hover' }"
+                                :props="defaultParams"
                                 style="width: 100%"
+                                :options="options"
+                                v-model="selectedOptions"
                         >
                         </el-cascader>
                     </el-form-item>
@@ -71,6 +73,14 @@
                     telephone: '',
                     email: '',
                 },
+                options: [],
+                selectedOptions: [],
+                defaultParams: {
+                    label: 'name',
+                    value: 'name',
+                    children: 'cityList',
+                    expandTrigger: 'hover'
+                },
                 updateRule: {
                     nickName: [
                         {min: 2, max: 22, message: '昵称长度在2-22个字符之间', trigger: 'change'},
@@ -103,6 +113,12 @@
         },
         mounted() {
             this.imageUrl = localStorage.getItem('userAvatar');
+            this.$axios
+                .get('/api/city')
+                .then(resp => {
+                    this.options = resp.data.data;
+                });
+            console.log(this.selectedOptions[0] + this.selectedOptions[1]);
         },
         methods: {
             goBack() {
