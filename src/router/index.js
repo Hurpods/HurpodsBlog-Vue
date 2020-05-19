@@ -46,7 +46,17 @@ const routes = [
         meta: {
             title: 'HurpodsBlog后台',
             requireAuthAdmin: true,
-        }
+        },
+        children: [
+            {
+                path: '/content/article/overview',
+                name: 'BooksOverView',
+                component: () => import('@/components/admin/books/BooksOverView'),
+                meta:{
+                    title:'书籍概览'
+                }
+            }
+        ]
     },
     {
         path: '/login',

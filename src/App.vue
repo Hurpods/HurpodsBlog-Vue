@@ -81,4 +81,11 @@
     .sidebar-container .is-horizontal {
         display: none;
     }
+
+    .backstage-main{
+        position: relative;
+        width: 85%;
+        float: right;
+        padding: 16px 19px 0 19px;
+    }
 </style>

@@ -3,11 +3,11 @@
         <div class="scrollbar-hide">
             <div>
                 <el-menu
-                        default-active="/website/overview"
+                        :default-active="this.$route.path"
                         text-color="#fff"
                         background-color="#2c3e50"
                         style="width: 100%"
-
+                        v-bind:router="true"
                 >
                     <el-submenu index="/website">
                         <template slot="title">

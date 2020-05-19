@@ -1,30 +1,22 @@
 <template>
     <div style="position: relative;height: 100%;width: 100%;">
-        <el-container>
-            <el-aside style="width: 13%">
-                <back-stage-side class="sidebar-container"/>
-            </el-aside>
-            <el-container class="right-panel">
-                <el-header style="height: 60px;width: 100%;position: fixed;">
-                    <BreadCrumb/>
-                </el-header>
-                <el-main style="margin-top: 60px;">Main</el-main>
-            </el-container>
-        </el-container>
-
+        <back-stage-side class="sidebar-container"/>
+        <div class="right-panel">
+            <Header/>
+        </div>
         <router-view/>
     </div>
 </template>
 
 <script>
     import BackStageSide from "../framework/BackStageSide";
-    import BreadCrumb from "../framework/BreadCrumb";
+    import Header from "./Header";
 
     export default {
         name: "AdminIndex",
         components: {
             BackStageSide,
-            BreadCrumb
+            Header
         }
     }
 </script>
