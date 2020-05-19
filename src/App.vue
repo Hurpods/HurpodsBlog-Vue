@@ -28,6 +28,7 @@
 </script>
 <style>
     #app {
+        height: 100%;
         font-family: Avenir, Helvetica, Arial, sans-serif;
         -webkit-font-smoothing: antialiased;
         -moz-osx-font-smoothing: grayscale;
@@ -71,5 +72,13 @@
     a:hover:after {
         left: 0;
         width: 100%;
+    }
+
+    .scrollbar-wrapper {
+        overflow-x: hidden !important;
+    }
+
+    .sidebar-container .is-horizontal {
+        display: none;
     }
 </style>

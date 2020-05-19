@@ -1,10 +1,12 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
-import Home from "@/components/public/Home";
-import Login from "@/components/public/Login";
-import Register from "@/components/public/Register";
-import Profile from "@/components/public/account/Profile";
-import Update from "@/components/public/account/Update";
+
+const Home = () => import( "@/components/public/Home");
+const Login = () => import("@/components/public/Login");
+const Register = () => import("@/components/public/Register");
+const Profile = () => import("@/components/public/account/Profile");
+const Update = () => import("@/components/public/account/Update");
+const AdminIndex = () => import("@/components/admin/AdminIndex");
 
 Vue.use(VueRouter)
 
@@ -36,6 +38,15 @@ const routes = [
                 }
             }
         ]
+    },
+    {
+        path: '/backstage',
+        name: 'AdminIndex',
+        component: AdminIndex,
+        meta: {
+            title: 'HurpodsBlog后台',
+            requireAuthAdmin: true,
+        }
     },
     {
         path: '/login',
