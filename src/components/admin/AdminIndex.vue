@@ -9,7 +9,7 @@
 </template>
 
 <script>
-    import BackStageSide from "../framework/BackStageSide";
+    import BackStageSide from "../publicComponents/BackStageSide";
     import Header from "./Header";
 
     export default {

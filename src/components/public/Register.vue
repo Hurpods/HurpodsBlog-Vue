@@ -40,7 +40,7 @@
 </template>
 
 <script>
-    import AuthSideSwipper from "@/components/framework/AuthSideSwipper";
+    import AuthSideSwipper from "@/components/publicComponents/AuthSideSwipper";
 
     export default {
         name: "Register",

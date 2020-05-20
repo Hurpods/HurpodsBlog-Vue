@@ -49,11 +49,19 @@ const routes = [
         },
         children: [
             {
-                path: '/content/article/overview',
-                name: 'BooksOverView',
-                component: () => import('@/components/admin/books/BooksOverView'),
-                meta:{
-                    title:'书籍概览'
+                path: '/content/books/overview',
+                name: 'Index',
+                component: () => import('@/components/admin/books/overview/Index'),
+                meta: {
+                    title: '书籍概览'
+                }
+            },
+            {
+                path: '/content/books/write',
+                name: 'WriteReport',
+                component: () => import('@/components/admin/books/report/WriteReport'),
+                meta: {
+                    title: '攥写读后感'
                 }
             }
         ]

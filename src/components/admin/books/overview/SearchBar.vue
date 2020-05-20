@@ -4,7 +4,7 @@
                 @keyup.enter.native="searchClick"
                 placeholder="通过书名或作者搜索..."
                 prefix-icon="el-icon-search"
-                size="small"
+                size="medium"
                 style="width: 400px;margin-right: 10px"
                 v-model="keywords">
         </el-input>
@@ -17,9 +17,7 @@
         name: "SearchBar",
         data(){
             return{
-                keywords:'',
-                books:[],
-                cardLoading:[]
+                keywords:''
             }
         },
         methods:{

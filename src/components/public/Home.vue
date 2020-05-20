@@ -8,7 +8,7 @@
 <script>
 
 
-    import NavMenu from "../framework/NavMenu";
+    import NavMenu from "../publicComponents/NavMenu";
     export default {
         name: "Home",
         components: {NavMenu}

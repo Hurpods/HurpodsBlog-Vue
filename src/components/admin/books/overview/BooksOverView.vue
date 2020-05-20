@@ -1,7 +1,7 @@
 <template>
-    <div class="backstage-main" style="padding-right: 4px;">
-        <el-row style="height: 840px;">
-            <!--            <search-bar @onSearch="searchResult" ref="searchBar"></search-bar>-->
+    <div>
+        <el-row>
+            <search-bar @onSearch="searchResult" ref="searchBar"></search-bar>
             <el-tooltip effect="dark" placement="right"
                         v-for="item in books.slice((currentPage-1)*pageSize,currentPage*pageSize)"
                         :key="item.id">
@@ -25,7 +25,7 @@
                 </el-card>
             </el-tooltip>
         </el-row>
-        <el-row>
+        <el-row style="position: fixed;bottom: 15px;left: 49%;">
             <el-pagination
                     @current-change="handleCurrentChange"
                     :current-page="currentPage"
@@ -48,7 +48,7 @@
             return {
                 books: [],
                 currentPage: 1,
-                pageSize: 27
+                pageSize: 16
             }
         },
         mounted() {
@@ -58,7 +58,7 @@
             loadBooks() {
                 let _this = this;
                 this.$axios
-                    .get('/api/books')
+                    .get('/api/content/books')
                     .then(r => {
                         if (r.data.code === 1) {
                             _this.books = r.data.data;
@@ -68,6 +68,20 @@
             handleCurrentChange: function (currentPage) {
                 this.currentPage = currentPage;
             },
+            searchResult() {
+                let _this = this;
+                let keywords = this.$refs.searchBar.keywords;
+                this.$axios
+                    .get('/api/content/search/books/' + keywords)
+                    .then(r => {
+                        if (r.data.code === 1) {
+                            _this.books = r.data.data;
+                            _this.$emit('searchResult');
+                        } else if (r.data.code === 10002) {
+                            this.$message.warning("搜索内容不得为空");
+                        }
+                    })
+            }
         }
     }
 </script>
@@ -100,9 +114,9 @@
 
     .book {
         width: 135px;
-        margin-bottom: 40px;
+        margin-bottom: 125px;
         height: 233px;
         float: left;
-        margin-right: 26px;
+        margin-left: 50px;
     }
 </style>

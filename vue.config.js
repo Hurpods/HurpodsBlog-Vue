@@ -1,7 +1,10 @@
+const path = require('path');
+const CKEditorWebpackPlugin = require('@ckeditor/ckeditor5-dev-webpack-plugin');
+const {styles} = require('@ckeditor/ckeditor5-dev-utils');
 module.exports = {
     /* 部署生产环境和开发环境下的URL：可对当前环境进行区分，baseUrl 从 Vue CLI 3.3 起已弃用，要使用publicPath */
     /* baseUrl: process.env.NODE_ENV === 'production' ? './' : '/' */
-     publicPath: process.env.NODE_ENV === 'production' ? './' : '/',
+    publicPath: process.env.NODE_ENV === 'production' ? './' : '/',
     //publicPath:'/',
     /* 输出文件目录：在npm run build时，生成文件的目录名称 */
     outputDir: 'dist',
@@ -35,4 +38,38 @@ module.exports = {
             },
         },
     },
+    //ckeditor相关
+    transpileDependencies: [
+        /ckeditor5-[^/\\]+[/\\]src[/\\].+\.js$/,
+    ],
+    configureWebpack: {
+        plugins: [
+            new CKEditorWebpackPlugin({
+                // See https://ckeditor.com/docs/ckeditor5/latest/features/ui-language.html
+                language: 'zh-cn'
+            })
+        ]
+    },
+    chainWebpack: config => {
+        const svgRule = config.module.rule('svg');
+        svgRule.exclude.add(path.join(__dirname, 'node_modules', '@ckeditor'));
+        config.module
+            .rule('cke-svg')
+            .test(/ckeditor5-[^/\\]+[/\\]theme[/\\]icons[/\\][^/\\]+\.svg$/)
+            .use('raw-loader')
+            .loader('raw-loader');
+        config.module
+            .rule('cke-css')
+            .test(/ckeditor5-[^/\\]+[/\\].+\.css$/)
+            .use('postcss-loader')
+            .loader('postcss-loader')
+            .tap(() => {
+                return styles.getPostCssConfig({
+                    themeImporter: {
+                        themePath: require.resolve('@ckeditor/ckeditor5-theme-lark'),
+                    },
+                    minify: true
+                });
+            });
+    }
 }
