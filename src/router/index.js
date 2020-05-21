@@ -67,6 +67,14 @@ const routes = [
         ]
     },
     {
+        path: '/reporter',
+        name: 'Reporter',
+        component: () => import('@/components/public/content/Reporter'),
+        meta: {
+            title: '读后感'
+        }
+    },
+    {
         path: '/login',
         name: 'Login',
         component: Login,

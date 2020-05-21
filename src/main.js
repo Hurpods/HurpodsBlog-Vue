@@ -76,6 +76,11 @@ Vue.prototype.myValidate = function defaultValidator(rule, value, callback, type
     });
 }
 
+Vue.prototype.unescapeHtml = function unescapeHTML(a) {
+    a = "" + a;
+    return a.replace(/&lt;/g, "<").replace(/&gt;/g, ">").replace(/&amp;/g, "&").replace(/&quot;/g, '"').replace(/&apos;/g, "'");
+}
+
 new Vue({
     router,
     store,

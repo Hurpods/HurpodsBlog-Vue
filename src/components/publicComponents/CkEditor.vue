@@ -41,7 +41,7 @@
             data.append('allowSize', '5');
             return new Promise((resolve, reject) => {
                 axios({
-                    url: '/api/upload/image',
+                    url: '/api/upload/content/image',
                     method: 'post',
                     data,
                     headers: {

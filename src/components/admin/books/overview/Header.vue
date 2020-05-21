@@ -3,7 +3,7 @@
         <el-tab-pane label="全部" name="0">
 
         </el-tab-pane>
-        <el-tab-pane v-for="(item,i) in catList" :key="i" :label="item.name" :name="item.id.toString()">
+        <el-tab-pane v-for="(item,i) in catList" :key="i" :label="item.categoryName" :name="item.categoryId.toString()">
 
         </el-tab-pane>
     </el-tabs>
