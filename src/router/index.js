@@ -63,6 +63,14 @@ const routes = [
                 meta: {
                     title: '攥写读后感'
                 }
+            },
+            {
+                path: '/user/overview',
+                name: 'UserOverview',
+                component: () => import('@/components/admin/users/overview/Index'),
+                meta: {
+                    title: '用户概览'
+                }
             }
         ]
     },

@@ -32,7 +32,8 @@
                     @current-change="handleCurrentChange"
                     :current-page="currentPage"
                     :page-size="pageSize"
-                    :total="books.length">
+                    :total="books.length"
+            >
             </el-pagination>
         </el-row>
     </div>
@@ -87,21 +88,43 @@
                     })
             },
             deleteBook(bookId) {
-                console.log(bookId);
+                let _this = this;
+                this.$confirm('此操作将永久删除该图书，是否继续？', '警告', {
+                    confirmButtonText: '确定',
+                    cancelButtonText: '取消',
+                    type: 'warning'
+                }).then(() => {
+                    this.$axios
+                        .delete('/api/content/books/' + bookId)
+                        .then(r => {
+                            if (r.data.code === 1) {
+                                _this.$message.success(r.data.data);
+                                _this.loadBooks()
+                            } else {
+                                _this.$message.error(r.data.data);
+                            }
+                        })
+                        .catch(r => {
+                            _this.$message(r)
+                        })
+                }).catch(() => {
+
+                })
+
             },
             editBook(book) {
                 this.$refs.edit.dialogFormVisible = true
                 this.$refs.edit.form = {
-                    bookId:book.bookId,
-                    bookCover:book.bookCover,
-                    bookTitle:book.bookTitle,
-                    bookAuthor:book.bookAuthor,
-                    postDate:book.postDate,
-                    bookPress:book.bookPress,
-                    bookAbs:book.bookAbs,
-                    category:{
-                        categoryId:book.category.categoryId.toString(),
-                        categoryName:book.category.categoryName
+                    bookId: book.bookId,
+                    bookCover: book.bookCover,
+                    bookTitle: book.bookTitle,
+                    bookAuthor: book.bookAuthor,
+                    postDate: book.postDate,
+                    bookPress: book.bookPress,
+                    bookAbs: book.bookAbs,
+                    category: {
+                        categoryId: book.category.categoryId.toString(),
+                        categoryName: book.category.categoryName
                     }
                 }
             }
@@ -115,7 +138,7 @@
         height: 172px;
         margin-bottom: 7px;
         overflow: hidden;
-        cursor:pointer;
+        cursor: pointer;
     }
 
     img {
@@ -142,7 +165,9 @@
         height: 233px;
         float: left;
         margin-left: 50px;
+        transition: .5s;
     }
+
     .el-icon-delete {
         cursor: pointer;
         float: right;

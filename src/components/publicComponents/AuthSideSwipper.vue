@@ -14,7 +14,7 @@
                 <img src="@/assets/img/lunbo/4.png"/>
             </el-carousel-item>
         </el-carousel>
-        <div style="position: relative;top: 40%;font-size: 20px;font-weight: bold;">
+        <div style="position: relative;top: 40%;font-size: 20px;font-weight: bold">
             <span>本站点前端技术栈为Vue+Element UI+axios</span><br>
             <span>后端技术栈为Spring Boot+My Batis</span>
         </div>
@@ -33,5 +33,6 @@
         position: absolute;
         height: 100%;
         background-image: linear-gradient(135deg, rgb(26, 210, 253) 0%, rgb(0, 138, 255) 100%);
+        text-align: center;
     }
 </style>

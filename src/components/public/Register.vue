@@ -33,7 +33,7 @@
                 <el-input type="text" v-model="registerForm.email" placeholder="请输入邮箱" auto-complete="off"/>
             </el-form-item>
             <el-form-item style="margin-left: -80px;margin-top: 30px;">
-                <el-button type="primary" style="width: 100px" @click="register('registerForm')">注册</el-button>
+                <el-button type="primary" style="width: 100px;float: right" @click="register('registerForm')">注册</el-button>
             </el-form-item>
         </el-form>
     </div>

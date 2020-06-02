@@ -28,11 +28,11 @@
                     active-color="#13ce66"
                     inactive-color="lightseagreen"
                     active-text="记住密码"
-                    style="width: fit-content;margin-left: -238px;"
+                    style="width: fit-content"
             >
             </el-switch>
             <el-form-item style="margin-left: -80px;margin-top: 15px">
-                <el-button type="primary" v-on:click="login('loginForm')" style="width: 100px">登录</el-button>
+                <el-button type="primary" v-on:click="login('loginForm')" style="width: 100px;float: right">登录</el-button>
             </el-form-item>
         </el-form>
     </div>

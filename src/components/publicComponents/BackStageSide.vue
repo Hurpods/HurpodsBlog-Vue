@@ -61,7 +61,6 @@
                             </template>
                             <el-menu-item index="/content/books/overview">图书概览</el-menu-item>
                             <el-menu-item index="/content/books/write">读后感攥写</el-menu-item>
-                            <el-menu-item index="/content/books/manage">图书管理</el-menu-item>
                         </el-submenu>
                     </el-submenu>
 
