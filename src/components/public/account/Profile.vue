@@ -66,7 +66,7 @@
                         _this.UID = response.data.data.userId;
                         _this.nickName = response.data.data.userNickName;
                         _this.registerTime = response.data.data.registerTime;
-                        _this.locate = response.data.data.userLocate;
+                        _this.locate = response.data.data.userLocation.provinceName + response.data.data.userLocation.cityName;
                         _this.role = response.data.data.roles[0].roleDescription;
                     }
                 })

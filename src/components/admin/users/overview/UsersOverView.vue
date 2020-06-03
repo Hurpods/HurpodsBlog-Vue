@@ -7,7 +7,7 @@
                     tooltip-effect="dark"
                     :data="users"
                     style="width: 100%;border-radius: 15px"
-                    height="250"
+                    height="840px"
                     @selection-change="handleSelectionChange"
             >
                 <el-table-column
@@ -34,10 +34,13 @@
                 >
                 </el-table-column>
                 <el-table-column
-                        prop="userLocate"
+                        prop="userLocation"
                         label="地区"
                         width="250px"
                 >
+                    <template slot-scope="scope">
+                        {{users[scope.$index].userLocation.provinceName+users[scope.$index].userLocation.cityName}}
+                    </template>
                 </el-table-column>
                 <el-table-column
                         prop="userTel"
@@ -104,7 +107,7 @@
             return {
                 users: [],
                 currentPage: 1,
-                pageSize: 16,
+                pageSize: 13,
                 multipleSelection: []
             }
         },
@@ -141,7 +144,7 @@
                     userId: user.userId,
                     userName: user.userName,
                     userNickName: user.userNickName,
-                    userLocate: user.userLocate,
+                    userLocate: user.locate,
                     userTel: user.userTel,
                     userEmail: user.userEmail,
                     roles: Number(user.roles[0].roleId)

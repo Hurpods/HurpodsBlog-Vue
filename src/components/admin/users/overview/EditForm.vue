@@ -16,7 +16,8 @@
                     <el-input type="hidden" v-model="userForm.userId" autocomplete="off" style="width:300px"></el-input>
                 </el-form-item>
                 <el-form-item label="用户名" prop="userName">
-                    <el-input v-model="userForm.userName" autocomplete="off" style="width: 300px"></el-input>
+                    <el-input v-model="userForm.userName" autocomplete="off" style="width: 300px"
+                              :disabled="true"></el-input>
                 </el-form-item>
                 <el-form-item label="昵称" prop="userNickName">
                     <el-input v-model="userForm.userNickName" autocomplete="off" style="width: 300px"></el-input>
@@ -27,6 +28,7 @@
                             style="width: 300px"
                             :options="options"
                             v-model="userForm.userLocate"
+                            @change="testT"
                     >
                     </el-cascader>
                 </el-form-item>
@@ -69,7 +71,7 @@
                     userId: '',
                     userName: '',
                     userNickName: '',
-                    userLocate: '',
+                    userLocate: [],
                     userTel: '',
                     userEmail: '',
                     roles: ''
@@ -78,7 +80,7 @@
                 roleOption: [],
                 defaultParams: {
                     label: 'name',
-                    value: 'name',
+                    value: 'code',
                     children: 'cityList',
                     expandTrigger: 'hover'
                 },
@@ -107,7 +109,7 @@
                 this.userForm = {
                     userName: '',
                     nickName: '',
-                    userLocate: '',
+                    userLocate: [],
                     userTel: '',
                     userEmail: '',
                     roles: ''
@@ -118,19 +120,26 @@
                 this.$axios
                     .put('/api/user/' + this.userForm.userId,
                         {
-                            userId:this.userForm.userId,
-                            userName:this.userForm.userName,
-                            nickName:this.userForm.userNickName,
-                            locate:this.userForm.userLocate,
-                            telephone:this.userForm.userTel,
-                            email:this.userForm.userEmail,
-                            roles:this.userForm.roles
+                            userId: this.userForm.userId,
+                            userName: this.userForm.userName,
+                            nickName: this.userForm.userNickName,
+                            locate: this.userForm.userLocate,
+                            telephone: this.userForm.userTel,
+                            email: this.userForm.userEmail,
+                            roles: this.userForm.roles
                         })
                     .then(r => {
-                        if (r.data.code===1){
-                            _this.$message.success('修改成功')
+                        if (r.data.code === 1) {
+                            _this.$message.success(r.data.data)
+                            _this.userDialog = false
+                            this.$emit('onSubmit')
+                        }else{
+                            _this.$message.error(r.data.message)
                         }
                     })
+            },
+            testT(k) {
+                console.log(k)
             }
         }
     }

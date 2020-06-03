@@ -140,7 +140,7 @@
                 options: [],
                 defaultParams: {
                     label: 'name',
-                    value: 'name',
+                    value: 'code',
                     children: 'cityList',
                     expandTrigger: 'hover'
                 },
@@ -223,10 +223,13 @@
                 let username = this.$route.params.username;
                 this.$refs['commonForm'].validate((valid) => {
                     if (valid) {
+                        let locate=[]
+                        locate.push(this.commonForm.selectedOptions[0])
+                        locate.push(this.commonForm.selectedOptions[1])
                         this.$axios
                             .post('/api/updateInfo/' + username, {
                                 nickName: this.commonForm.nickName,
-                                locate: this.commonForm.selectedOptions[0] + this.commonForm.selectedOptions[1],
+                                locate: locate,
                                 telephone: this.commonForm.telephone,
                                 email: this.commonForm.email
                             })

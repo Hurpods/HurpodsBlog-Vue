@@ -82,7 +82,7 @@
                         name: ''
                     }
                 ],
-                obj : {}
+                obj: {}
             }
         },
         mounted() {
@@ -118,6 +118,7 @@
                 console.log(this.obj);
             },
             onSubmit() {
+                let _this = this;
                 this.$axios
                     .post('/api/content/books', {
                         bookId: this.form.bookId,
@@ -132,6 +133,7 @@
                     .then(r => {
                         if (r.data.code === 1) {
                             this.dialogFormVisible = false;
+                            _this.$message.success(r.data.data);
                             this.$emit('onSubmit');
                         }
                     })
