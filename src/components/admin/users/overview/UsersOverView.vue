@@ -6,8 +6,8 @@
                     ref="multipleTable"
                     tooltip-effect="dark"
                     :data="users"
-                    style="width: 100%;border-radius: 15px"
-                    height="840px"
+                    style="width: 100%;border-radius: 15px;;box-shadow: 0 2px 12px 0 rgba(0,0,0,.1);"
+                    height="697px"
                     @selection-change="handleSelectionChange"
             >
                 <el-table-column
@@ -84,13 +84,16 @@
                     </template>
                 </el-table-column>
             </el-table>
+            <el-card style="border-radius: 15px;top:20px;position: relative;">
+                <div>共选择了{{multipleSelection.length}}个用户</div>
+            </el-card>
         </el-row>
         <el-row style="position: fixed;bottom: 15px;left: 49%;">
             <el-pagination
                     @current-change="handleCurrentChange"
                     :current-page="currentPage"
                     :page-size="pageSize"
-                    :total="users.length"
+                    :total="userSize"
             >
             </el-pagination>
         </el-row>
@@ -107,22 +110,24 @@
             return {
                 users: [],
                 currentPage: 1,
-                pageSize: 13,
-                multipleSelection: []
+                pageSize: 12,
+                multipleSelection: [],
+                userSize: 1
             }
         },
         mounted() {
-            this.loadUser();
+            this.loadUser(this.currentPage);
         },
         methods: {
-            loadUser() {
+            loadUser(currentPage) {
                 let _this = this;
                 this.$axios
-                    .get('/api/users')
+                    .get('/api/users?pageNum=' + currentPage)
                     .then(r => {
                         if (r.data.code === 1) {
-                            _this.users = r.data.data;
-
+                            console.log(r.data.data);
+                            _this.users = r.data.data["userList"];
+                            _this.userSize=r.data.data["pageSize"];
                         } else if (r.data.code !== 1) {
                             _this.$message.error(r.data.message + '，错误代码：' + r.data.code);
                         }
@@ -130,6 +135,7 @@
             },
             handleCurrentChange: function (currentPage) {
                 this.currentPage = currentPage;
+                this.loadUser(currentPage);
             },
             handleSelectionChange(val) {
                 this.multipleSelection = val
