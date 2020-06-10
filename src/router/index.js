@@ -1,12 +1,8 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
 
-const Home = () => import( "@/components/public/Home");
 const Login = () => import("@/components/public/Login");
 const Register = () => import("@/components/public/Register");
-const Profile = () => import("@/components/public/account/Profile");
-const Update = () => import("@/components/public/account/Update");
-const AdminIndex = () => import("@/components/admin/AdminIndex");
 
 Vue.use(VueRouter)
 
@@ -14,7 +10,7 @@ const routes = [
     {
         path: '/',
         name: 'Home',
-        component: Home,
+        component: () => import("@/components/public/Home"),
         meta: {
             title: 'HurpodsBlog——成长的道路'
         },
@@ -22,7 +18,7 @@ const routes = [
             {
                 path: '/account/:username',
                 name: 'Profile',
-                component: Profile,
+                component: () => import("@/components/public/account/Profile"),
                 meta: {
                     requireAuth: true,
                     title: '个人中心'
@@ -31,7 +27,7 @@ const routes = [
             {
                 path: '/account/update/:username',
                 name: 'Update',
-                component: Update,
+                component: () => import("@/components/public/account/Update"),
                 meta: {
                     requireAuth: true,
                     title: '修改资料'
@@ -42,7 +38,7 @@ const routes = [
     {
         path: '/backstage',
         name: 'AdminIndex',
-        component: AdminIndex,
+        component: () => import("@/components/admin/AdminIndex"),
         meta: {
             title: 'HurpodsBlog后台',
             requireAuthAdmin: true,
@@ -70,6 +66,22 @@ const routes = [
                 component: () => import('@/components/admin/users/overview/Index'),
                 meta: {
                     title: '用户概览'
+                }
+            },
+            {
+                path: '/user/manage',
+                name: 'UserManage',
+                component: () => import('@/components/admin/users/manage/Index'),
+                meta: {
+                    title: '用户管理'
+                }
+            },
+            {
+                path: '/user/permission',
+                name: 'PermissionManage',
+                component: () => import('@/components/admin/users/permission/Index'),
+                meta: {
+                    title: '权限管理'
                 }
             }
         ]

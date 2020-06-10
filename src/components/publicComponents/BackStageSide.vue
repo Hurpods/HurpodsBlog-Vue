@@ -1,6 +1,10 @@
 <template>
     <el-scrollbar wrap-class="scrollbar-wrapper">
         <div class="scrollbar-hide">
+            <div style="width: 100%;padding-top: 40px;padding-bottom: 20px;text-align: center">
+                <el-avatar :size="160" :src="avatarUrl"></el-avatar>
+                <br><br><span style="color: whitesmoke;">{{userName}}</span>
+            </div>
             <div>
                 <el-menu
                         :default-active="this.$route.path"
@@ -72,7 +76,17 @@
 
 <script>
     export default {
-        name: "BackStageSide"
+        name: "BackStageSide",
+        data() {
+            return {
+                userName: '',
+                avatarUrl: ''
+            }
+        },
+        mounted() {
+            this.userName=localStorage.getItem("userName");
+            this.avatarUrl=localStorage.getItem("userAvatar");
+        }
     }
 </script>
 
