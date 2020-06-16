@@ -32,7 +32,8 @@
             >
             </el-switch>
             <el-form-item style="margin-left: -80px;margin-top: 15px">
-                <el-button type="primary" v-on:click="login('loginForm')" style="width: 100px;float: right">登录</el-button>
+                <el-button type="primary" v-on:click="login('loginForm')" style="width: 100px;float: right">登录
+                </el-button>
             </el-form-item>
         </el-form>
     </div>
@@ -98,8 +99,10 @@
                                     _this.$message.success("登录成功");
                                     let path = this.$route.query.redirect
                                     this.$router.replace({path: path === '/' || path === undefined ? '/' : path})
+                                } else if (successResponse.data.code === 20003) {
+                                    _this.$message.error("该账号已被封禁，请联系管理员");
                                 } else {
-                                    _this.$message.error(successResponse.data.message);
+                                    _this.$message.error("未知错误，错误代码：" + successResponse.data.code)
                                 }
                             })
                             .catch(failResponse => {

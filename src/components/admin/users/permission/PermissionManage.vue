@@ -1,14 +1,27 @@
 <template>
     <div style="padding: 20px">
-        <el-card class="scsc" shadow="hover" v-for="item in specialRole" :key="item.userId">
-            <el-avatar :size="100" :src="item.userAvatar"></el-avatar>
-            <br>
-            <span style="font-weight: bolder">{{item.userName}}</span>
-            <hr style="border:0;background-color: #9c9c9c;height: 2px">
-            <span><i class="el-icon-s-custom">{{item.roles[0].roleDescription}}</i></span>
-            <br>
-            <span>加入HB：{{new Date(item.registerTime)|timeFilter2()}}天</span>
-        </el-card>
+        <el-row>
+            <el-card class="scsc" shadow="hover" v-for="item in specialRole" :key="item.userId">
+                <el-avatar :size="100" :src="item.userAvatar"></el-avatar>
+                <br>
+                <span style="font-weight: bolder">{{item.userName}}</span>
+                <hr style="border:0;background-color: #9c9c9c;height: 2px">
+                <span><i class="el-icon-s-custom">{{item.roles[0].roleDescription}}</i></span>
+                <br>
+                <span>加入HB：{{new Date(item.registerTime)|timeFilter2()}}天</span>
+            </el-card>
+            <el-tooltip class="item" effect="dark" content="添加新的特殊用户" placement="top">
+                <el-card class="scsc" style="width: 235px" shadow="hover"><i class="el-icon-circle-plus-outline plus"></i></el-card>
+            </el-tooltip>
+        </el-row>
+        <el-row style="position: fixed;bottom: 15px;left: 49%;">
+            <el-pagination
+                    :current-page="currentPage"
+                    :page-size="pageSize"
+                    :total="specialSize"
+            >
+            </el-pagination>
+        </el-row>
     </div>
 </template>
 
@@ -17,20 +30,24 @@
         name: "PermissionManage",
         data() {
             return {
-                specialRole: []
+                specialRole: [],
+                currentPage: 1,
+                pageSize: 9,
+                specialSize: 1
             }
         },
         mounted() {
-            this.loadSpecialRole()
+            this.loadSpecialRole(this.currentPage)
         },
         methods: {
-            loadSpecialRole() {
+            loadSpecialRole(currentPage) {
                 let _this = this;
                 this.$axios
-                    .get('/api/user/special')
+                    .get('/api/specialUser?pageNum=' + currentPage)
                     .then(r => {
                         if (r.data.code === 1) {
-                            _this.specialRole = r.data.data;
+                            _this.specialRole = r.data.data["specialList"];
+                            _this.specialSize = r.data.data["specialSize"];
                         } else {
                             _this.$message.error(r.data.data + "错误代码：" + r.data.code)
                         }
@@ -73,8 +90,14 @@
         float: left;
         width: 15%;
         text-align: center;
-        margin-left: 60px;
+        margin-left: 65px;
         border-radius: 15px;
         cursor: default;
+        margin-bottom: 110px;
+    }
+
+    .plus {
+        font-size: 190px;
+        cursor: pointer;
     }
 </style>

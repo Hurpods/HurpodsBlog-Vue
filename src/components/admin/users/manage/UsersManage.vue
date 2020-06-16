@@ -1,6 +1,6 @@
 <template>
     <div>
-        <edit-form ref="userEdit" @onSubmit="loadUser()"></edit-form>
+        <edit-form ref="userEdit" @onSubmit="loadUser(this.currentPage)"></edit-form>
         <el-row>
             <el-table
                     ref="userTable"
@@ -12,13 +12,14 @@
             >
                 <el-table-column
                         type="selection"
-                        width="55">
+                        width="55"
+                >
                 </el-table-column>
                 <el-table-column
                         fixed
                         prop="userId"
                         label="UID"
-                        width="100px"
+                        width="50px"
                 >
                 </el-table-column>
                 <el-table-column
@@ -36,7 +37,7 @@
                 <el-table-column
                         prop="userLocation"
                         label="地区"
-                        width="250px"
+                        width="200px"
                 >
                     <template slot-scope="scope">
                         {{users[scope.$index].userLocation.provinceName+users[scope.$index].userLocation.cityName}}
@@ -45,7 +46,7 @@
                 <el-table-column
                         prop="registerTime"
                         label="注册时间"
-                        width="200px"
+                        width="160px"
                 >
 
                 </el-table-column>
@@ -58,6 +59,7 @@
                 <el-table-column
                         prop="userEmail"
                         label="邮箱"
+                        width="220px"
                 >
                 </el-table-column>
                 <el-table-column
@@ -69,7 +71,16 @@
                     </template>
                 </el-table-column>
                 <el-table-column
+                        prop="enabled"
+                        label="状态"
+                >
+                    <template slot-scope="scope">
+                        {{users[scope.$index].enabled|enableFilter()}}
+                    </template>
+                </el-table-column>
+                <el-table-column
                         fixed="right"
+                        width="250px"
                 >
                     <template slot="header" slot-scope="scope">
                         <el-input
@@ -82,18 +93,27 @@
                     </template>
                     <template slot-scope="scope">
                         <el-button
-                                @click.native.prevent="deleteUser(users[scope.$index].userId)"
-                                size="mini"
-                                type="danger"
-                        >
-                            删除
-                        </el-button>
-                        <el-button
                                 @click.native.prevent="updateUser(users[scope.$index])"
                                 size="mini"
                                 type="primary"
                         >
                             编辑
+                        </el-button>
+                        <el-button
+                                @click.native.prevent="banUser(users[scope.$index].userId)"
+                                size="mini"
+                                type="warning"
+                        >
+                            <template>
+                                {{users[scope.$index].enabled|banOrUnBan()}}
+                            </template>
+                        </el-button>
+                        <el-button
+                                @click.native.prevent="deleteUser(users[scope.$index].userId)"
+                                size="mini"
+                                type="danger"
+                        >
+                            删除
                         </el-button>
                     </template>
                 </el-table-column>
@@ -106,6 +126,13 @@
                         @click="batchDelete"
                 >
                     全部删除
+                </el-button>
+                <el-button
+                        type="warning"
+                        class="footer-button"
+                        @click="batchBan"
+                >
+                    全部封禁
                 </el-button>
             </el-card>
         </el-row>
@@ -140,6 +167,14 @@
         mounted() {
             this.loadUser(this.currentPage);
         },
+        filters: {
+            enableFilter: function (val) {
+                return val ? "正常" : "封禁"
+            },
+            banOrUnBan: function (val) {
+                return val ? "封禁" : "解禁"
+            }
+        },
         methods: {
             loadUser(currentPage) {
                 let _this = this;
@@ -162,9 +197,6 @@
             handleSelectionChange(val) {
                 this.multipleSelection = val;
             },
-            deleteUser(val) {
-                console.log(val)
-            },
             updateUser(user) {
                 this.$refs.userEdit.userDialog = true
                 this.$refs.userEdit.userForm = {
@@ -176,6 +208,36 @@
                     userEmail: user.userEmail,
                     roles: Number(user.roles[0].roleId)
                 }
+            },
+            ban(val) {
+                let _this = this;
+                this.$axios
+                    .put('/api/user/ban',
+                        {
+                            'ids': val
+                        })
+                    .then(r => {
+                        if (r.data.code === 1) {
+                            _this.$message.success("成功封禁" + r.data.data + "名用户");
+                        } else {
+                            _this.$message.error("操作失败，错误代码：" + r.data.code)
+                        }
+                    })
+            },
+            banUser(val) {
+                let selectedId = [];
+                selectedId.push(val);
+                this.ban(selectedId);
+            },
+            batchBan() {
+                let selectedId = [];
+                this.multipleSelection.forEach((value) => {
+                    selectedId.push(value.userId)
+                })
+                this.ban(selectedId);
+            },
+            deleteUser(val) {
+                console.log(val)
             },
             batchDelete() {
                 let selectedId = [];
