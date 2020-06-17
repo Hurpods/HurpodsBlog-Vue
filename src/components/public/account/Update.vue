@@ -227,7 +227,7 @@
                         locate.push(this.commonForm.selectedOptions[0])
                         locate.push(this.commonForm.selectedOptions[1])
                         this.$axios
-                            .post('/api/updateInfo/' + username, {
+                            .post('/api/user/update/' + username, {
                                 nickName: this.commonForm.nickName,
                                 locate: locate,
                                 telephone: this.commonForm.telephone,
@@ -256,7 +256,7 @@
                     if (this.passwordForm.oldPassword && this.passwordForm.newPassword && this.passwordForm.confirmPassword) {
                         if (valid) {
                             this.$axios
-                                .post('/api/updatePassword/' + username, {
+                                .post('/api/user/updatePassword/' + username, {
                                     oldPassword: this.passwordForm.oldPassword,
                                     newPassword: this.passwordForm.newPassword,
                                     confirmPassword: this.passwordForm.confirmPassword

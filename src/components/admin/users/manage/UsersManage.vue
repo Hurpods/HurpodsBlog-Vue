@@ -199,14 +199,16 @@
             },
             updateUser(user) {
                 this.$refs.userEdit.userDialog = true
+                let locate=[]
+                locate.push(user.userLocation.provinceCode)
+                locate.push(user.userLocation.cityCode)
                 this.$refs.userEdit.userForm = {
                     userId: user.userId,
                     userName: user.userName,
                     userNickName: user.userNickName,
-                    userLocate: user.locate,
+                    userLocate: locate,
                     userTel: user.userTel,
                     userEmail: user.userEmail,
-                    roles: Number(user.roles[0].roleId)
                 }
             },
             ban(val) {

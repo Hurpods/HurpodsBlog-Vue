@@ -38,17 +38,6 @@
                 <el-form-item label="邮箱" prop="userEmail">
                     <el-input v-model="userForm.userEmail" autocomplete="off" style="width: 300px"></el-input>
                 </el-form-item>
-                <el-form-item label="权限组" prop="roles">
-                    <el-select v-model="userForm.roles" filterable placeholder="请选择" style="width: 300px">
-                        <el-option
-                                v-for="item in roleOption"
-                                :key="item.roleId"
-                                :label="item.roleDescription"
-                                :value="item.roleId"
-                        >
-                        </el-option>
-                    </el-select>
-                </el-form-item>
             </el-form>
             <el-button
                     type='primary'
@@ -74,7 +63,6 @@
                     userLocate: [],
                     userTel: '',
                     userEmail: '',
-                    roles: ''
                 },
                 options: [],
                 roleOption: [],
@@ -88,16 +76,8 @@
         },
         mounted() {
             this.getLocation();
-            this.getRole();
         },
         methods: {
-            getRole() {
-                this.$axios
-                    .get('/auth/roles')
-                    .then(r => {
-                        this.roleOption = r.data.data
-                    })
-            },
             getLocation() {
                 this.$axios
                     .get('/api/city')

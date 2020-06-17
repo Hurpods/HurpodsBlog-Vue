@@ -84,7 +84,7 @@
                     center: true
                 }).then(({value}) => {
                     _this.$axios
-                        .post('/api/deleteUser/' + username, {
+                        .post('/api/user/delete/' + username, {
                             oldPassword: value
                         })
                         .then(r => {

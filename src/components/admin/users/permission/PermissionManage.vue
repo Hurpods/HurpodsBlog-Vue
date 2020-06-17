@@ -1,17 +1,29 @@
 <template>
     <div style="padding: 20px">
         <el-row>
+            <edit-form ref="specialForm"></edit-form>
             <el-card class="scsc" shadow="hover" v-for="item in specialRole" :key="item.userId">
-                <el-avatar :size="100" :src="item.userAvatar"></el-avatar>
-                <br>
-                <span style="font-weight: bolder">{{item.userName}}</span>
-                <hr style="border:0;background-color: #9c9c9c;height: 2px">
-                <span><i class="el-icon-s-custom">{{item.roles[0].roleDescription}}</i></span>
-                <br>
-                <span>加入HB：{{new Date(item.registerTime)|timeFilter2()}}天</span>
+                <div slot="header">
+                    <span style="font-size: large;font-weight: bolder;">{{item.userName}}</span>
+                    <el-tooltip class="item" effect="dark" content="移除该员工" placement="top">
+                        <i class="el-icon-close"
+                           style="float: right; padding: 3px 0;font-size: 22px;cursor: pointer;font-weight: bolder;"
+                           @click="removeSpecial(item.userId)"
+                        ></i>
+                    </el-tooltip>
+                </div>
+                <div style="text-align: center">
+                    <el-avatar :size="100" :src="item.userAvatar" style="vertical-align: middle"></el-avatar>
+                    <span style="font-weight: bold;margin-left: 16px"></span>
+                    <hr style="border:0;background-color: #9c9c9c;height: 2px">
+                    <span><i class="el-icon-s-custom">{{item.roles[0].roleDescription}}</i></span>
+                    <br>
+                    <span>加入HB：{{new Date(item.registerTime)|timeFilter()}}天</span>
+                </div>
             </el-card>
             <el-tooltip class="item" effect="dark" content="添加新的特殊用户" placement="top">
-                <el-card class="scsc" style="width: 235px" shadow="hover"><i class="el-icon-circle-plus-outline plus"></i></el-card>
+                <i class="el-icon-circle-plus-outline" style="font-size: 190px;cursor: pointer;"
+                   @click="$refs.specialForm.specialDialog=true"></i>
             </el-tooltip>
         </el-row>
         <el-row style="position: fixed;bottom: 15px;left: 49%;">
@@ -26,8 +38,13 @@
 </template>
 
 <script>
+    import EditForm from "./EditForm";
+
     export default {
         name: "PermissionManage",
+        components: {
+            EditForm
+        },
         data() {
             return {
                 specialRole: [],
@@ -54,28 +71,13 @@
                     }).catch(r => {
                     _this.$message.error(r)
                 })
+            },
+            removeSpecial(val){
+                console.log(val)
             }
         },
         filters: {
-            timeFilter: function (value, format) {
-                let o = {
-                    "M+": value.getMonth() + 1,
-                    "d+": value.getDate(),
-                    "h+": value.getHours(),
-                    "m+": value.getMinutes(),
-                    "s+": value.getSeconds(),
-                }
-                if (/(y+)/.test(format)) {
-                    format = format.replace(RegExp.$1, (value.getFullYear() + "").substr(4 - RegExp.$1.length));
-                    for (let k in o) {
-                        if (new RegExp(`(${k})`).test(format)) {
-                            format = format.replace(RegExp.$1, (RegExp.$1.length === 1) ? (o[k]) : (("00" + o[k]).substr(("" + o[k]).length)))
-                        }
-                    }
-                    return format;
-                }
-            },
-            timeFilter2: function (value) {
+            timeFilter: function (value) {
                 let nowTime = new Date();
                 let time = nowTime - value;
                 return Math.floor(time / (24 * 3600 * 1000));
@@ -89,15 +91,10 @@
         position: relative;
         float: left;
         width: 15%;
-        text-align: center;
         margin-left: 65px;
         border-radius: 15px;
         cursor: default;
         margin-bottom: 110px;
     }
 
-    .plus {
-        font-size: 190px;
-        cursor: pointer;
-    }
 </style>
