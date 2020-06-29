@@ -187,6 +187,9 @@
                 }
             }
         },
+        beforeCreate() {
+            document.title="修改资料"
+        },
         mounted() {
             this.imageUrl = localStorage.getItem('userAvatar');
             this.$axios

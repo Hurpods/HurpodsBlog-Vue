@@ -3,9 +3,9 @@
         <el-select v-model="value" filterable placeholder="请选择书籍" class="reporter-book">
             <el-option
                     v-for="item in options"
-                    :key="item.id"
-                    :label="item.title"
-                    :value="item.id"
+                    :key="item.bookId"
+                    :label="item.bookTitle"
+                    :value="item.bookId"
             >
             </el-option>
         </el-select>
@@ -56,8 +56,8 @@
                 value: '',
                 options: [
                     {
-                        id: '',
-                        title: ''
+                        bookId: '',
+                        bookTitle: ''
                     }
                 ],
                 rate: null,
@@ -68,7 +68,7 @@
         mounted() {
             let _this = this;
             this.$axios
-                .get('/api/content/books')
+                .get('/api/backStage/books')
                 .then(r => {
                     if (r.data.code === 1) {
                         _this.options = r.data.data;
@@ -82,7 +82,7 @@
             submitContent() {
                 let _this = this;
                 this.$axios
-                    .post('/api/content/reporter/write/post', {
+                    .post('/api/backStage/reporter/post', {
                         title: this.title,
                         content: this.$refs.editor.editorData,
                         rate: this.rate,

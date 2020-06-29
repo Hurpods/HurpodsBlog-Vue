@@ -10,10 +10,12 @@ const routes = [
     {
         path: '/',
         name: 'Home',
-        component: () => import("@/components/public/Home"),
-        meta: {
-            title: 'HurpodsBlog——成长的道路'
-        },
+        component: () => import("@/components/public/Home.vue"),
+    },
+    {
+        path: '/index',
+        name: 'NavMenuIndex',
+        component: () => import("@/components/public/NavIndex"),
         children: [
             {
                 path: '/account/:username',
@@ -21,7 +23,6 @@ const routes = [
                 component: () => import("@/components/public/account/Profile"),
                 meta: {
                     requireAuth: true,
-                    title: '个人中心'
                 }
             },
             {
@@ -30,9 +31,18 @@ const routes = [
                 component: () => import("@/components/public/account/Update"),
                 meta: {
                     requireAuth: true,
-                    title: '修改资料'
                 }
-            }
+            },
+            {
+                path: '/content/reporter/:reporterId',
+                name: 'Reporter',
+                component: () => import('@/components/public/content/Reporter'),
+            },
+            {
+                path: '/content/article/:articleId',
+                name: 'Article',
+                component: () => import('@/components/public/content/Article'),
+            },
         ]
     },
     {
@@ -86,14 +96,7 @@ const routes = [
             }
         ]
     },
-    {
-        path: '/reporter',
-        name: 'Reporter',
-        component: () => import('@/components/public/content/Reporter'),
-        meta: {
-            title: '读后感'
-        }
-    },
+
     {
         path: '/login',
         name: 'Login',
@@ -114,14 +117,7 @@ const routes = [
 
 const router = new VueRouter({
     mode: 'history',
-    routes,
-    scrollBehavior(to, from, savedPosition) {
-        if (savedPosition) {
-            return savedPosition;
-        } else {
-            return {x: 0, y: 0}
-        }
-    }
+    routes
 })
 
 export default router

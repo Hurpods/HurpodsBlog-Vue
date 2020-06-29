@@ -5,7 +5,7 @@
         </div>
         <div class="user-info">
             <div class="user-avatar">
-                <el-avatar :src="avatarUrl" :size="160"></el-avatar>
+                <el-avatar :src="user.userAvatar" :size="160"></el-avatar>
             </div>
             <div class="user-name">
                 {{$route.params.username}}
@@ -16,15 +16,15 @@
             <el-collapse-transition>
                 <div class="user-detail" v-show="details">
                     <el-divider content-position="left">UID</el-divider>
-                    <span>{{UID}}</span>
+                    <span>{{user.userId}}</span>
                     <el-divider content-position="left">昵称</el-divider>
-                    <span>{{nickName}}</span>
+                    <span>{{user.userNickName}}</span>
                     <el-divider content-position="left">注册时间</el-divider>
-                    <span>{{registerTime}}</span>
+                    <span>{{user.registerTime}}</span>
                     <el-divider content-position="left">地区</el-divider>
-                    <span>{{locate}}</span>
+                    <span>{{user.userLocation.provinceName+user.userLocation.cityName}}</span>
                     <el-divider content-position="left">用户组</el-divider>
-                    <span>{{role}}</span>
+                    <span>{{user.role}}</span>
                 </div>
             </el-collapse-transition>
 
@@ -43,31 +43,30 @@
         name: "Profile",
         data() {
             return {
-                avatarUrl: '',
-                updateUrl: '',
+                user: {
+                    userId: '',
+                    userAvatar: '',
+                    userNickName: '',
+                    registerTime: '',
+                    role: '',
+                    userLocation: ''
+                },
                 details: false,
                 showText: '详细资料',
-                UID: '',
-                nickName: '',
-                registerTime: '',
-                locate: '',
-                role: ''
+                updateUrl: ''
             }
         },
         beforeCreate() {
+            document.title="个人中心"
             let username = this.$route.params.username;
             let _this = this;
             this.$axios
                 .get('/api/user/' + username)
                 .then(response => {
                     if (response.data.code === 1) {
-                        _this.avatarUrl = response.data.data.userAvatar;
+                        _this.user = response.data.data
                         _this.updateUrl = '/account/update/' + username;
-                        _this.UID = response.data.data.userId;
-                        _this.nickName = response.data.data.userNickName;
-                        _this.registerTime = response.data.data.registerTime;
-                        _this.locate = response.data.data.userLocation.provinceName + response.data.data.userLocation.cityName;
-                        _this.role = response.data.data.roles[0].roleDescription;
+                        _this.user.role=response.data.data.roles[0].roleDescription
                     }
                 })
         },

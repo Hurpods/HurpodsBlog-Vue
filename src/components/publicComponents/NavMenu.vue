@@ -52,7 +52,6 @@
                 this.$axios
                     .post('/auth/authBackStage')
                     .then(r => {
-                        console.log(r);
                         if (r.data.code === 1) {
                             this.baseCommand.push({index: '/backstage', name: '进入后台'});
                         }

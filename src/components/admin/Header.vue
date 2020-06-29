@@ -1,7 +1,8 @@
 <template>
     <div class="header-right">
-        <span style="font-size: 13px;position: relative;width: fit-content;float: left;padding: 22px 16px;">
-            {{this.$route.meta.title}}
+        <span style="font-size: 14px;position: relative;width: fit-content;float: left;padding: 22px 16px;">
+            <router-link to="/"><i class="el-icon-arrow-left">返回首页</i></router-link>
+            <el-divider direction="vertical"></el-divider>{{this.$route.meta.title}}
         </span>
     </div>
 </template>

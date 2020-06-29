@@ -19,7 +19,6 @@ axios.defaults.withCredentials = true
 axios.defaults.headers.common['Authorization'] = localStorage.getItem('token');
 
 router.beforeEach((to, from, next) => {
-        document.title = to.meta.title;
         if (to.meta.requireAuth) {
             if (localStorage.getItem('userName')) {
                 axios
