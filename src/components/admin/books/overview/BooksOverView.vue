@@ -19,7 +19,7 @@
                     </div>
                     <div class="info">
                         <div class="title">
-                            <a href="">{{item.bookTitle}}</a>
+                            <a href="">{{item.bookTitle|trans}}</a>
                         </div>
                         <i class="el-icon-delete" @click="deleteBook(item.bookId)"></i>
                     </div>
@@ -53,11 +53,20 @@
             return {
                 books: [],
                 currentPage: 1,
-                pageSize: 16
+                pageSize: 18
             }
         },
         mounted() {
             this.loadBooks();
+        },
+        filters:{
+          trans(value){
+            if(value.length>=8){
+              return value.slice(0,4)+'...'
+            }else{
+              return value
+            }
+          }
         },
         methods: {
             loadBooks() {

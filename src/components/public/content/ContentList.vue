@@ -4,17 +4,17 @@
             <el-carousel :interval="4000" type="card" height="500px">
                 <el-carousel-item v-for="(item,index) in carousel" :key="index">
                     <router-link v-if="index%2===0" :to="'/content/article/'+item.articleId">
-                        <img src="https://api.dujin.org/bing/1920.php">
+                        <img :src="'http://localhost:8090/file/pic'+item.articleCover" style="height: 500px"/>
                     </router-link>
                     <router-link v-if="index%2===1" :to="'/content/reporter/'+item.reporterId">
-                        <img :src="item.book.bookCover"/>
+                        <img :src="item.book.bookCover" width="800px"/>
                     </router-link>
                 </el-carousel-item>
             </el-carousel>
         </div>
         <div class="main-contain-left">
             <el-card class="card" :body-style="{ padding: '0px'}" v-for="article in articles" :key="article.articleId">
-                <img class="img-cover" src="https://api.dujin.org/bing/1920.php" alt="daily">
+                <img class="img-cover" :src="'http://localhost:8090/file/pic'+article.articleCover" alt="articleCover">
                 <div class="content-info">
                     <router-link :to="'/content/article/'+article.articleId" class="article-title">
                         {{article.articleTitle}}
@@ -23,16 +23,8 @@
                     <p></p>
                     <span class="article-summary">{{article.articleSummary}}</span>
                     <br/>
-                    <p></p>
-                    <span><router-link to="/content/tag/"><i class="el-icon-price-tag">标签1</i></router-link><el-divider
-                            direction="vertical"></el-divider></span>
-                    <span><router-link to="/content/tag/"><i class="el-icon-price-tag">标签2</i></router-link><el-divider
-                            direction="vertical"></el-divider></span>
-                    <span><router-link to="/content/tag/"><i class="el-icon-price-tag">标签3</i></router-link><el-divider
-                            direction="vertical"></el-divider></span>
                 </div>
             </el-card>
-
         </div>
         <div class="main-content-right">
             <span style="position: absolute;font-weight: bolder;font-size: 30px;cursor: default;top: 61%;right: 18%;color: #9c9c9c;z-index: 1">小老虎最近在读什么？</span>
@@ -83,7 +75,7 @@
         methods: {
             loadArticles() {
                 let _this = this;
-                this.$axios.get('/content/article').then(r => {
+                this.$axios.get('/content/articles').then(r => {
                     if (r.data.code === 1) {
                         _this.articles = r.data.data;
                     }
@@ -93,7 +85,8 @@
                 let _this = this;
                 this.$axios.get('/content/reporter').then(r => {
                     if (r.data.code === 1) {
-                        _this.reporters = r.data.data;
+                      console.log(r.data.data)
+                        _this.reporters = r.data.data.reporterList;
                     }
                 })
             },

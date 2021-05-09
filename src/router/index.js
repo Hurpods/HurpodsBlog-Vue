@@ -63,11 +63,19 @@ const routes = [
                 }
             },
             {
-                path: '/content/books/write',
+                path: '/content/reporters/write',
                 name: 'WriteReport',
                 component: () => import('@/components/admin/books/report/WriteReport'),
                 meta: {
-                    title: '攥写读后感'
+                    title: '攥写书评'
+                }
+            },
+            {
+                path: '/content/reporters/manage',
+                name: 'ReporterManager',
+                component: () => import('@/components/admin/books/report/Index'),
+                meta: {
+                    title: '书评管理'
                 }
             },
             {
@@ -93,7 +101,23 @@ const routes = [
                 meta: {
                     title: '权限管理'
                 }
-            }
+            },
+            {
+                path:'/content/articles/write',
+                name:'WriteArticle',
+                component:()=>import('@/components/admin/article/WriteArticle'),
+                meta:{
+                    title:'攥写文章'
+                }
+            },
+            {
+                path: '/content/articles/manage',
+                name: 'ReporterManager',
+                component: () => import('@/components/admin/article/ArticleManager'),
+                meta: {
+                    title: '文章管理'
+                }
+            },
         ]
     },
 

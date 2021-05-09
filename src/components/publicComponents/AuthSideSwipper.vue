@@ -15,8 +15,13 @@
             </el-carousel-item>
         </el-carousel>
         <div style="position: relative;top: 40%;font-size: 20px;font-weight: bold">
-            <span>本站点前端技术栈为Vue+Element UI+axios</span><br>
-            <span>后端技术栈为Spring Boot+My Batis</span>
+            <span>前端技术栈为:</span><br>
+            <span>Vue<el-divider direction="vertical"></el-divider>Element UI<el-divider
+                    direction="vertical"></el-divider>axios</span><br>
+            <span>后端技术栈为:</span><br>
+            <span>Spring Boot<el-divider direction="vertical"></el-divider>Spring Security<el-divider
+                    direction="vertical"></el-divider><br>
+                Json Web Token<el-divider direction="vertical"></el-divider>My Batis</span>
         </div>
     </div>
 </template>

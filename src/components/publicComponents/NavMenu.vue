@@ -13,7 +13,7 @@
             {{item.navItem}}
         </el-menu-item>
         <li>
-            <span style="position: absolute;padding-top: 20px;right: 43%;font-size: 20px;font-weight: bold;cursor:default">HurpodsBlog——成长的道路</span>
+            <span style="position: absolute;padding-top: 20px;right: 43%;font-size: 20px;font-weight: bold;cursor:default"></span>
         </li>
         <el-submenu index="avatar" v-show="isLogin()" style="float:right">
             <template slot="title" style="padding:15px;">

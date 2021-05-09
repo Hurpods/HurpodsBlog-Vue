@@ -109,7 +109,7 @@
                             </template>
                         </el-button>
                         <el-button
-                                @click.native.prevent="deleteUser(users[scope.$index].userId)"
+                                @click.native.prevent="deleteUser(users[scope.$index].userId,scope.$index)"
                                 size="mini"
                                 type="danger"
                         >
@@ -238,8 +238,18 @@
                 })
                 this.ban(selectedId);
             },
-            deleteUser(val) {
-                console.log(val)
+            deleteUser(val,index) {
+              let _this=this;
+              this.$axios
+                  .delete('/api/user/'+val)
+                  .then(r=>{
+                    if(r.data.code===1){
+                      _this.$message.success("删除成功");
+                      _this.users.splice(index,1);
+                    }else{
+                      _this.$message.error(r.data.message);
+                    }
+                  })
             },
             batchDelete() {
                 let selectedId = [];

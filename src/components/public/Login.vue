@@ -101,8 +101,10 @@
                                     this.$router.replace({path: path === '/' || path === undefined ? '/' : path})
                                 } else if (successResponse.data.code === 20003) {
                                     _this.$message.error("该账号已被封禁，请联系管理员");
-                                } else {
-                                    _this.$message.error("未知错误，错误代码：" + successResponse.data.code)
+                                } else if(successResponse.data.code === 0){
+                                    _this.$message.error("账号或密码错误");
+                                }else{
+                                  _this.$message.error("未知错误，错误代码：" + successResponse.data.code)
                                 }
                             })
                             .catch(failResponse => {

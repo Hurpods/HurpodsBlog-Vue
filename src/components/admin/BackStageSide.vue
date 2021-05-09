@@ -44,9 +44,9 @@
                                 <i class="el-icon-edit"></i>
                                 文章
                             </template>
-                            <el-menu-item index="/content/article/overview">文章概览</el-menu-item>
-                            <el-menu-item index="/content/article/write">文章攥写</el-menu-item>
-                            <el-menu-item index="/content/article/manage">文章管理</el-menu-item>
+                            <el-menu-item index="/content/articles/overview">文章概览</el-menu-item>
+                            <el-menu-item index="/content/articles/write">文章攥写</el-menu-item>
+                            <el-menu-item index="/content/articles/manage">文章管理</el-menu-item>
                         </el-submenu>
 
                         <el-submenu index="/comment">
@@ -64,7 +64,8 @@
                                 图书
                             </template>
                             <el-menu-item index="/content/books/overview">图书概览</el-menu-item>
-                            <el-menu-item index="/content/books/write">读后感攥写</el-menu-item>
+                            <el-menu-item index="/content/reporters/write">书评攥写</el-menu-item>
+                            <el-menu-item index="/content/reporters/manage">书评管理</el-menu-item>
                         </el-submenu>
                     </el-submenu>
 

@@ -2,7 +2,7 @@
     <div style="position: relative;width: 55%;margin: 0 auto;" >
         <div class="main-content">
             <div class="author">
-                <el-avatar :size="160"></el-avatar>
+                <el-avatar :size="160" src="http://localhost:8090/file/avatar/0.png"></el-avatar>
                 <br>
                 <span style="font-size: 24px;font-weight: bolder">小老虎不做梦</span>
                 <hr>
