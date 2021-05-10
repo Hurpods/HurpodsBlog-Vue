@@ -112,7 +112,7 @@ const routes = [
             },
             {
                 path: '/content/articles/manage',
-                name: 'ReporterManager',
+                name: 'ArticleManager',
                 component: () => import('@/components/admin/article/ArticleManager'),
                 meta: {
                     title: '文章管理'

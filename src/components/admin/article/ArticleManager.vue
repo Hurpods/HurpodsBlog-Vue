@@ -150,11 +150,22 @@ export default {
 		searchArticle(){
 
 		},
-		editArticle(){
-
+		editArticle(val){
+			localStorage.setItem('articleId', val);
+			this.$router.push('/content/articles/write');
 		},
-		deleteArticle(){
-
+		deleteArticle(val, index){
+			let _this = this;
+			this.$axios
+				.delete('/content/article/'+val)
+				.then(r=>{
+					if (r.data.code === 1) {
+						_this.$message.success("删除成功");
+						_this.articles.splice(index, 1);
+					} else {
+						_this.$message.error(r.data.message);
+					}
+				})
 		}
 	}
 }

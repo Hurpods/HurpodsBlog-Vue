@@ -4,7 +4,7 @@
             <el-carousel :interval="4000" type="card" height="500px">
                 <el-carousel-item v-for="(item,index) in carousel" :key="index">
                     <router-link v-if="index%2===0" :to="'/content/article/'+item.articleId">
-                        <img :src="'http://localhost:8090/file/pic'+item.articleCover" style="height: 500px"/>
+                        <img :src="'http://localhost:8090/file/cover/'+item.articleCover" style="height: 500px"/>
                     </router-link>
                     <router-link v-if="index%2===1" :to="'/content/reporter/'+item.reporterId">
                         <img :src="item.book.bookCover" width="800px"/>
@@ -14,7 +14,7 @@
         </div>
         <div class="main-contain-left">
             <el-card class="card" :body-style="{ padding: '0px'}" v-for="article in articles" :key="article.articleId">
-                <img class="img-cover" :src="'http://localhost:8090/file/pic'+article.articleCover" alt="articleCover">
+                <img class="img-cover" :src="'http://localhost:8090/file/cover/'+article.articleCover" alt="articleCover">
                 <div class="content-info">
                     <router-link :to="'/content/article/'+article.articleId" class="article-title">
                         {{article.articleTitle}}

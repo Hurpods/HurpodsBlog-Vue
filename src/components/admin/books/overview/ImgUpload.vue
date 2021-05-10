@@ -1,7 +1,7 @@
 <template>
     <el-upload
             ref="upload"
-            action="http://localhost:8090/api/upload/book/cover"
+            action="http://localhost:8090/api/upload/cover"
             :show-file-list="false"
             :before-upload="beforeUpload"
             :before-remove="beforeRemove"

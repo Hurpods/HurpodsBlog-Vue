@@ -87,7 +87,8 @@ export default {
     methods: {
         loadReporter(reporterId) {
             let _this = this;
-            this.$axios.get('/content/reporter/' + reporterId)
+            this.$axios
+				.get('/content/reporter/' + reporterId)
                 .then(r => {
                     if (r.data.code === 1) {
                         _this.$axios
@@ -116,6 +117,7 @@ export default {
             })
                 .then(r=>{
                     if(r.data.code===1){
+						sessionStorage.removeItem("reporterId")
                         _this.$message.success("编辑成功");
                         _this.$router.replace("/content/reporters/manage")
                     }else {

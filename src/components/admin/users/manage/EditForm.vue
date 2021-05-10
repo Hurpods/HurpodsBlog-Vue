@@ -117,9 +117,6 @@
                             _this.$message.error(r.data.message)
                         }
                     })
-            },
-            testT(k) {
-                console.log(k)
             }
         }
     }
