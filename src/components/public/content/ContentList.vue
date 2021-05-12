@@ -85,7 +85,6 @@
                 let _this = this;
                 this.$axios.get('/content/reporter').then(r => {
                     if (r.data.code === 1) {
-                      console.log(r.data.data)
                         _this.reporters = r.data.data.reporterList;
                     }
                 })

@@ -100,7 +100,7 @@
                             编辑
                         </el-button>
                         <el-button
-                                @click.native.prevent="banUser(users[scope.$index].userId)"
+                                @click.native.prevent="banUser(users[scope.$index].userId,users[scope.$index].enabled)"
                                 size="mini"
                                 type="warning"
                         >
@@ -226,10 +226,27 @@
                         }
                     })
             },
-            banUser(val) {
-                let selectedId = [];
-                selectedId.push(val);
-                this.ban(selectedId);
+            banUser(val,en) {
+				if(en){
+					let selectedId = [];
+					selectedId.push(val);
+					this.ban(selectedId);
+				}else{
+					let _this=this;
+					this.$axios
+						.put('/api/user/unban',
+							{
+								id:val
+							})
+					.then(r=>{
+						if(r.data.code===1){
+							_this.$message.success("成功解封")
+						}else{
+							_this.$message.error("操作失败，错误代码：" + r.data.code)
+						}
+					})
+				}
+
             },
             batchBan() {
                 let selectedId = [];

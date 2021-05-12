@@ -71,7 +71,7 @@ export default {
     mounted() {
         let _this = this;
         this.$axios
-            .get('/api/backStage/books')
+            .get('/content/books')
             .then(r => {
                 if (r.data.code === 1) {
                     _this.options = r.data.data;
@@ -92,7 +92,7 @@ export default {
                 .then(r => {
                     if (r.data.code === 1) {
                         _this.$axios
-                            .get('/api/backStage/books')
+                            .get('/content/books')
                             .then(r => {
                                 if (r.data.code === 1) {
                                     _this.options = r.data.data;

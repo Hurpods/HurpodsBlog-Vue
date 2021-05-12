@@ -59,7 +59,6 @@
         },
         filters: {
             ellipsis(val) {
-                console.log(val)
                 if (!val) {
                     return ''
                 }

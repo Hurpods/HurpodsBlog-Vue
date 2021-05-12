@@ -88,7 +88,7 @@
         mounted() {
             let _this = this;
             this.$axios
-                .get('/api/backStage/cats')
+                .get('/content/cats')
                 .then(r => {
                     if (r.data.code === 1) {
                         _this.options = r.data.data;
@@ -120,7 +120,7 @@
             onSubmit() {
                 let _this = this;
                 this.$axios
-                    .post('/api/backStage/books', {
+                    .post('/content/books', {
                         bookId: this.form.bookId,
                         bookCover: this.form.bookCover,
                         bookTitle: this.form.bookTitle,

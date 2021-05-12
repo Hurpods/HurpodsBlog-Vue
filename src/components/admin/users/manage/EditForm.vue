@@ -28,7 +28,6 @@
                             style="width: 300px"
                             :options="options"
                             v-model="userForm.userLocate"
-                            @change="testT"
                     >
                     </el-cascader>
                 </el-form-item>

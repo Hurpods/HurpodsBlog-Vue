@@ -25,7 +25,7 @@
             listByCategory() {
                 let _this = this;
                 let cid = this.$refs.tab.activeName;
-                let requestUrl = 'api/backStage/cat/' + cid + '/books';
+                let requestUrl = '/content/cat/' + cid ;
                 this.$axios
                     .get(requestUrl)
                     .then(r => {

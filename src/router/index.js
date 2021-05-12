@@ -52,6 +52,7 @@ const routes = [
         meta: {
             title: 'HurpodsBlog后台',
             requireAuthAdmin: true,
+            requireAuth: true,
         },
         children: [
             {
@@ -118,6 +119,14 @@ const routes = [
                     title: '文章管理'
                 }
             },
+            {
+                path:'/website/logging',
+                name:'Logs',
+                component:()=>import('@/components/admin/website/Logs'),
+                meta: {
+                    title:'站点日志'
+                }
+            }
         ]
     },
 

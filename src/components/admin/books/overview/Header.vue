@@ -21,7 +21,7 @@
         mounted() {
             let _this = this;
             this.$axios
-                .get('/api/backStage/cats')
+                .get('/content/cats')
                 .then(r => {
                     if (r.data.code === 1) {
                         _this.catList = r.data.data;

@@ -72,7 +72,7 @@
             loadBooks() {
                 let _this = this;
                 this.$axios
-                    .get('/api/backStage/books')
+                    .get('/content/books')
                     .then(r => {
                         if (r.data.code === 1) {
                             _this.books = r.data.data;
@@ -86,7 +86,7 @@
                 let _this = this;
                 let keywords = this.$refs.searchBar.keywords;
                 this.$axios
-                    .get('/api/backStage/books/search/' + keywords)
+                    .get('/content/books/search/' + keywords)
                     .then(r => {
                         if (r.data.code === 1) {
                             _this.books = r.data.data;
@@ -104,7 +104,7 @@
                     type: 'warning'
                 }).then(() => {
                     this.$axios
-                        .delete('/api/backStage/books/' + bookId)
+                        .delete('/content/books/' + bookId)
                         .then(r => {
                             if (r.data.code === 1) {
                                 _this.$message.success(r.data.data);

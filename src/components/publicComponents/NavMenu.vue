@@ -39,7 +39,7 @@
             return {
                 navList: [
                     {index: '/', navItem: '首页'},
-                    {index: '/talking', navItem: '碎碎念'},
+                    {index: '/articles', navItem: '全部文章'},
                     {index: '/library', navItem: '图书馆'}
                 ],
                 baseCommand: [],
