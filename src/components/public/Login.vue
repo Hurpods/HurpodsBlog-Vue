@@ -91,6 +91,8 @@
                                     localStorage.setItem("userName", successResponse.data.data.username);
                                     localStorage.setItem("userAvatar", successResponse.data.data.userAvatar);
                                     localStorage.setItem("token", successResponse.headers.authorization);
+									localStorage.setItem("userId",successResponse.data.data.id);
+
 
                                     this.$store.dispatch('setUser', successResponse.data.data.username);
                                     this.$store.dispatch('setAvatar', successResponse.data.data.userAvatar);

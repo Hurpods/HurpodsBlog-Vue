@@ -14,11 +14,19 @@
                 <span>{{updateTime}}</span>
             </div>
         </div>
-        <div class="other-content">
-            <div class="commentArea">
+		<br/>
+		<div class="other-content">
+			<div class="commentArea">
 
-            </div>
-        </div>
+			</div><br/>
+			<el-button type="primary" style="float: right">提交</el-button>
+			<span style="float: right;font-size: 14px;position: relative;right: 50px">字数限制:0/140</span>
+		</div>
+		<div class="comment-box">
+			<el-card>
+
+			</el-card>
+		</div>
     </div>
 </template>
 
@@ -41,6 +49,7 @@
         },
         mounted() {
             this.loadArticle()
+			this.initCommenter()
         },
         methods: {
             initCkEditor(content) {
@@ -70,7 +79,17 @@
                         }
                     });
                 this.fullscreenLoading = false
-            }
+            },
+			initCommenter(){
+				ClassicEditor
+					.create(document.querySelector('.commentArea'))
+					.then(editor => {
+						editor.isReadOnly = false;
+					})
+					.catch(r => {
+						this.$message.error(r)
+					})
+			},
         }
     }
 </script>
@@ -91,7 +110,17 @@
         margin-bottom: 20px;
         cursor: default;
     }
-
+	.ck-editor__editable_inline {
+		min-height: 205px;
+	}
+	.other-content{
+		position: relative;
+		margin-top: 50px;
+		padding-bottom: 100px;
+	}
+	.comment-box{
+		padding-bottom: 100px;
+	}
     .author {
         text-align: center;
         padding: 25px 25px 0;
