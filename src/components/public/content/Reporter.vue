@@ -41,9 +41,30 @@
 		</div>
 		<hr>
 		<div class="comment-box">
-			<el-card>
-
-			</el-card>
+			<div v-if="comments.length>0">
+				<el-card v-for="comment in comments" :key="comment.commentId" style="margin-bottom: 20px">
+					<div class="comment-avatar">
+						<el-avatar :src="comment.user.userAvatar" :size="110"/>
+					</div>
+					<div v-html="comment.commentContent" class="ck-content comment-content">
+					</div>
+					<div style="text-align: center;display: inline-block;width: 110px;">
+						<span>{{comment.user.userNickName}}</span>
+					</div>
+					<div style="vertical-align: top;display: inline-block;float:right;">
+						<el-button type="text" icon="el-icon-more"></el-button>
+					</div>
+					<div style="vertical-align: top; display: inline-block; float: right;padding-right: 12px">
+						<el-button type="text">回复</el-button>
+					</div>
+					<div style="vertical-align: top; display: inline-block; float: right;padding-right: 12px;padding-top: 12px;font-size: 14px">
+						{{comment.commentPostTime}}
+					</div>
+				</el-card>
+			</div>
+			<div v-else>
+				<el-card>目前还没有评论……快来发表一条吧</el-card>
+			</div>
 		</div>
 	</div>
 </template>
@@ -62,7 +83,8 @@ export default {
 			bookRate: 0,
 			infoHeight: 0,
 			comment: '',
-			preId: -1
+			preId: -1,
+			comments: []
 		}
 	},
 	components: {
@@ -89,6 +111,7 @@ export default {
 				this.infoHeight = cover.offsetHeight + 'px'
 			}, 300)
 		})
+		this.loadComment()
 	},
 	methods: {
 		initCkEditor(content) {
@@ -101,6 +124,9 @@ export default {
 				.catch(r => {
 					this.$message.error(r)
 				})
+		},
+		initCommenter(){
+
 		},
 		loadReporter() {
 			let _this = this;
@@ -124,15 +150,28 @@ export default {
 			this.$axios
 				.post('/comment', {
 					commentContent: _this.comment,
-					commentAuthorId:localStorage.getItem("userId"),
-					commentPreId:_this.preId,
-					status:1,
-					contentId:this.$route.params.reporterId
+					commentAuthorId: localStorage.getItem("userId"),
+					commentPreId: _this.preId,
+					status: 1,
+					contentId: this.$route.params.reporterId
 				})
 				.then(r => {
 					if (r.data.code === 1) {
 						_this.$message.success("发表成功");
 						_this.$router.go(0);
+					}
+				})
+		},
+		loadComment() {
+			let _this = this;
+			let contentId = this.$route.params.reporterId
+			this.$axios
+				.get('/comment/reporter/' + contentId)
+				.then(r => {
+					if (r.data.code === 1) {
+						_this.comments = r.data.data
+					} else if (r.data.code === 60001) {
+						_this.$message.warning(r.data.message)
 					}
 				})
 		}
@@ -161,6 +200,8 @@ export default {
 	min-height: 205px;
 }
 
+
+
 .other-content {
 	position: relative;
 	margin-top: 50px;
@@ -171,6 +212,25 @@ export default {
 	padding-bottom: 100px;
 }
 
+.comment-avatar {
+	width: 110px;
+	display: inline-block;
+}
+
+.comment-content {
+	vertical-align: top;
+	width: 88%;
+	padding-left: 20px;
+	display: inline-block;
+	word-break: break-all;
+	word-wrap: break-word
+}
+
+.comment-content p {
+	margin-top: 0;
+	margin-bottom: 0;
+
+}
 
 .book {
 	padding: 20px;
