@@ -49,16 +49,18 @@
 					<div v-html="comment.commentContent" class="ck-content comment-content">
 					</div>
 					<div style="text-align: center;display: inline-block;width: 110px;">
-						<span>{{comment.user.userNickName}}</span>
+						<span>{{ comment.user.userNickName }}</span>
 					</div>
-					<div style="vertical-align: top;display: inline-block;float:right;">
-						<el-button type="text" icon="el-icon-more"></el-button>
+					<div style="vertical-align: top;display: inline-block;float:right;" v-show="isManager">
+						<el-button type="text" icon="el-icon-delete"
+								   @click="deleteComment(comment.commentId)"></el-button>
 					</div>
 					<div style="vertical-align: top; display: inline-block; float: right;padding-right: 12px">
 						<el-button type="text">回复</el-button>
 					</div>
-					<div style="vertical-align: top; display: inline-block; float: right;padding-right: 12px;padding-top: 12px;font-size: 14px">
-						{{comment.commentPostTime}}
+					<div
+						style="vertical-align: top; display: inline-block; float: right;padding-right: 12px;padding-top: 12px;font-size: 14px">
+						{{ comment.commentPostTime }}
 					</div>
 				</el-card>
 			</div>
@@ -84,7 +86,8 @@ export default {
 			infoHeight: 0,
 			comment: '',
 			preId: -1,
-			comments: []
+			comments: [],
+			isManager: false
 		}
 	},
 	components: {
@@ -112,6 +115,15 @@ export default {
 			}, 300)
 		})
 		this.loadComment()
+		if (this.$store.getters.isLogin) {
+			this.$axios
+				.post('/auth/authBackStage')
+				.then(r => {
+					if (r.data.code === 1) {
+						this.isManager = true
+					}
+				})
+		}
 	},
 	methods: {
 		initCkEditor(content) {
@@ -125,7 +137,7 @@ export default {
 					this.$message.error(r)
 				})
 		},
-		initCommenter(){
+		initCommenter() {
 
 		},
 		loadReporter() {
@@ -174,6 +186,17 @@ export default {
 						_this.$message.warning(r.data.message)
 					}
 				})
+		},
+		deleteComment(val) {
+			let _this = this;
+			this.$axios
+				.delete('/comment/' + val)
+				.then(r => {
+					if(r.data.code===1){
+						_this.$message.success("删除成功")
+						_this.$router.go(0)
+					}
+				})
 		}
 	}
 }
@@ -199,7 +222,6 @@ export default {
 .ck-editor__editable_inline {
 	min-height: 205px;
 }
-
 
 
 .other-content {
