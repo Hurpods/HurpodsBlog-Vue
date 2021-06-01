@@ -18,12 +18,9 @@
                             <i class="el-icon-s-home"></i>
                             <span>首页</span>
                         </template>
-                        <el-menu-item index="/website/overview">情况概要</el-menu-item>
                         <el-menu-item index="/website/logging">站点日志</el-menu-item>
 
                     </el-submenu>
-
-
                     <el-submenu index="/user">
                         <template slot="title" style="padding: 0">
                             <i class="el-icon-s-custom"></i>
@@ -44,7 +41,6 @@
                                 <i class="el-icon-edit"></i>
                                 文章
                             </template>
-                            <el-menu-item index="/content/articles/overview">文章概览</el-menu-item>
                             <el-menu-item index="/content/articles/write">文章攥写</el-menu-item>
                             <el-menu-item index="/content/articles/manage">文章管理</el-menu-item>
                         </el-submenu>
@@ -54,7 +50,6 @@
                                 <i class="el-icon-chat-dot-square"></i>
                                 评论
                             </template>
-                            <el-menu-item index="/content/comment/overview">评论概览</el-menu-item>
                             <el-menu-item index="/content/comment/manage">评论管理</el-menu-item>
                         </el-submenu>
 

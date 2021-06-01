@@ -6,16 +6,21 @@
                 style="width: 95%;margin: 60px auto;height: fit-content"
         >
             <el-tab-pane label="基础资料" name="first">
-                <el-upload
-                        class="avatar-uploader"
-                        action="https://jsonplaceholder.typicode.com/posts/"
-                        :show-file-list="false"
-                        :on-success="handleAvatarSuccess"
-                        :before-upload="beforeAvatarUpload"
-                >
-                    <img v-if="imageUrl" :src="imageUrl" class="avatar">
-                    <i v-else class="el-icon-plus avatar-uploader-icon"></i>
-                </el-upload>
+				<div style="width: 160px;float: left;text-align: center;">
+					<el-upload
+						class="avatar-uploader"
+						action="#"
+						:show-file-list="false"
+						:on-change="handleAvatarSuccess"
+						:before-upload="beforeAvatarUpload"
+						:auto-upload="false"
+						accept="image/png,image/jpg,image/jpeg"
+					>
+						<img v-if="imageUrl" :src="imageUrl" class="avatar">
+						<i v-else class="el-icon-plus avatar-uploader-icon"></i>
+					</el-upload>
+					<el-button style="margin-top: 20px" type="primary" v-show="showUpload" @click="uploadAvatar">上传</el-button>
+				</div>
                 <el-form
                         class="update-common"
                         label-width="80px"
@@ -125,7 +130,9 @@
             };
             return {
                 activeName: 'first',
+				showUpload:false,
                 imageUrl: '',
+				fileList:[],
                 commonForm: {
                     nickName: '',
                     selectedOptions: [],
@@ -203,24 +210,37 @@
                 let username = this.$route.params.username;
                 this.$router.replace('/account/' + username);
             },
-            handleAvatarSuccess(res, file) {
-                this.imageUrl = URL.createObjectURL(file.raw);
+            handleAvatarSuccess(res, fileList) {
+				this.fileList=fileList;
+                this.imageUrl = URL.createObjectURL(res.raw);
+				this.showUpload=true;
             },
             beforeAvatarUpload(file) {
-                const isJPG = file.type === 'image/jpeg';
                 const isLt2M = file.size / 1024 / 1024 < 2;
-
-                if (!isJPG) {
-                    this.$message.error('上传头像图片只能是 JPG 格式!');
-                }
                 if (!isLt2M) {
                     this.$message.error('上传头像图片大小不能超过 2MB!');
                 }
-                return isJPG && isLt2M;
+                return isLt2M;
             },
             resetForm(formName) {
                 this.$refs[formName].resetFields();
             },
+			uploadAvatar(){
+				let _this=this;
+				let fd=new FormData();
+				fd.append("id",localStorage.getItem("userId"))
+				fd.append("file",_this.fileList[_this.fileList.length-1].raw)
+				this.$axios
+					.post('/api/upload/avatar',fd)
+					.then(r=>{
+						if(r.data.code===1){
+							_this.$message.success("上传成功");
+							localStorage.removeItem("userAvatar")
+							localStorage.setItem("userAvatar",r.data.data)
+							_this.$router.go(0)
+						}
+					})
+			},
             updateCommon() {
                 let _this = this;
                 let username = this.$route.params.username;

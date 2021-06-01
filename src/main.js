@@ -53,6 +53,25 @@ router.beforeEach((to, from, next) => {
                     query: {redirect: to.fullPath}
                 })
             }
+        } else if (to.meta.requireAuthAdmin) {
+            if (localStorage.getItem('userName')){
+                axios
+                    .post('/auth/authBackStage',{},{
+                        headers: {
+                            'Authorization': localStorage.getItem('token')
+                        }
+                    }).then(r=>{
+                        if(r.data.code===1){
+                            next();
+                        }else{
+                            ElementUI.Message.error(r.data.message)
+                            next({
+                                path: '/',
+                                query: {redirect: to.fullPath}
+                            })
+                        }
+                })
+            }
         } else {
             next()
         }

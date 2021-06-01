@@ -7,7 +7,7 @@
                 <span style="font-size: 24px;font-weight: bolder">小老虎不做梦</span>
                 <hr>
             </div>
-            <div id="contentArea"></div>
+            <div class="ck-content" v-html="content" style="padding:20px"></div>
             <div class="footer">
                 <span>{{postTime}}</span>
                 <el-divider direction="vertical"></el-divider>
@@ -17,21 +17,41 @@
 		<br/>
 		<div class="other-content">
 			<div class="commentArea">
-
-			</div><br/>
-			<el-button type="primary" style="float: right">提交</el-button>
-			<span style="float: right;font-size: 14px;position: relative;right: 50px">字数限制:0/140</span>
+				<ck-editor ref="editor"></ck-editor>
+			</div>
+			<br/>
+			<el-button type="primary" style="float: right" @click="submitComment">提交</el-button>
 		</div>
+		<hr>
 		<div class="comment-box">
-			<el-card>
-
-			</el-card>
+			<div v-if="comments.length>0">
+				<el-card v-for="comment in comments" :key="comment.commentId" style="margin-bottom: 20px">
+					<div class="comment-avatar">
+						<el-avatar :src="comment.user.userAvatar" :size="110"/>
+						<div style="text-align: center;display: inline-block;width: 110px;">
+							<span>{{ comment.user.userNickName }}</span>
+						</div>
+					</div>
+					<div v-html="comment.commentContent" class="ck-content comment-content">
+					</div>
+					<div style="vertical-align: top;float:right;" v-show="isManager">
+						<el-button type="text" icon="el-icon-delete" @click="deleteComment(comment.commentId)"></el-button>
+					</div>
+					<div
+						style="vertical-align: top; display: inline-block; float: right;padding-right: 12px;padding-top: 12px;font-size: 14px">
+						{{ comment.commentPostTime }}
+					</div>
+				</el-card>
+			</div>
+			<div v-else>
+				<el-card>目前还没有评论……快来发表一条吧</el-card>
+			</div>
 		</div>
     </div>
 </template>
 
 <script>
-    import ClassicEditor from "@/components/in-editor/core/ckeditor";
+import CkEditor from "@/components/publicComponents/CkEditor";
 
     export default {
         name: "Article",
@@ -40,29 +60,30 @@
                 content: '',
                 postTime: '',
                 updateTime: '',
-                fullscreenLoading: true
+                fullscreenLoading: true,
+				comment: '',
+				comments: [],
+				isManager: false,
             }
         },
         components: {
+			CkEditor,
             // eslint-disable-next-line
-            ClassicEditor
         },
         mounted() {
             this.loadArticle()
-			this.initCommenter()
+			if (this.$store.getters.isLogin) {
+				this.$axios
+					.post('/auth/authComment')
+					.then(r => {
+						if (r.data.code === 1) {
+							this.isManager = true
+						}
+					})
+			}
+			this.loadComment()
         },
         methods: {
-            initCkEditor(content) {
-                ClassicEditor
-                    .create(document.querySelector('#contentArea'))
-                    .then(editor => {
-                        editor.isReadOnly = true;
-                        editor.setData(content);
-                    })
-                    .catch(r => {
-                        this.$message.error(r)
-                    })
-            },
             loadArticle() {
                 let _this = this;
                 let articleId = this.$route.params.articleId
@@ -72,7 +93,6 @@
                     .then(r => {
                         if (r.data.code === 1) {
                             _this.content = _this.unescapeHtml(r.data.data.articleContent);
-                            this.initCkEditor(_this.content);
                             _this.postTime = "发表时间：" + r.data.data.articleCreateTime
                             _this.updateTime = "最后修改时间：" + r.data.data.articleUpdateTime
                             document.title = r.data.data.articleTitle
@@ -80,17 +100,50 @@
                     });
                 this.fullscreenLoading = false
             },
-			initCommenter(){
-				ClassicEditor
-					.create(document.querySelector('.commentArea'))
-					.then(editor => {
-						editor.isReadOnly = false;
+			submitComment() {
+				let _this = this;
+				this.comment = this.$refs.editor.editorData
+
+				this.$axios
+					.post('/comment', {
+						commentContent: _this.comment,
+						commentAuthorId: localStorage.getItem("userId"),
+						status: 0,
+						contentId: this.$route.params.articleId
 					})
-					.catch(r => {
-						this.$message.error(r)
+					.then(r => {
+						if (r.data.code === 1) {
+							_this.$message.success("发表成功");
+							_this.$router.go(0);
+						}
 					})
 			},
-        }
+			loadComment() {
+				let _this = this;
+				let contentId = this.$route.params.articleId
+				this.$axios
+					.get('/comment/article/' + contentId)
+					.then(r => {
+						if (r.data.code === 1) {
+							_this.comments = r.data.data
+						} else if (r.data.code === 60001) {
+							_this.$message.warning(r.data.message)
+						}
+					})
+			},
+			deleteComment(val) {
+				let _this = this;
+				this.$axios
+					.delete('/comment/' + val)
+					.then(r => {
+						if (r.data.code === 1) {
+							_this.$message.success("删除成功")
+							_this.$router.go(0)
+						}
+					})
+				_this.visible = false
+			}
+        },
     }
 </script>
 
@@ -120,6 +173,25 @@
 	}
 	.comment-box{
 		padding-bottom: 100px;
+	}
+	.comment-avatar {
+		width: 110px;
+		display: inline-block;
+	}
+
+	.comment-content {
+		vertical-align: top;
+		width: 88%;
+		padding-left: 20px;
+		display: inline-block;
+		word-break: break-all;
+		word-wrap: break-word
+	}
+
+	.comment-content p {
+		margin-top: 0;
+		margin-bottom: 0;
+
 	}
     .author {
         text-align: center;

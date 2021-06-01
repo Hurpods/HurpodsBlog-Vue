@@ -51,8 +51,7 @@ const routes = [
         component: () => import("@/components/admin/AdminIndex"),
         meta: {
             title: 'HurpodsBlog后台',
-            requireAuthAdmin: true,
-            requireAuth: true,
+            requireAuthAdmin: true
         },
         children: [
             {
@@ -125,6 +124,14 @@ const routes = [
                 component:()=>import('@/components/admin/website/Logs'),
                 meta: {
                     title:'站点日志'
+                }
+            },
+            {
+                path:'/content/comment/manage',
+                name:'CommentManager',
+                component:()=>import('@/components/admin/comment/CommentManager'),
+                meta:{
+                    title:'评论管理'
                 }
             }
         ]

@@ -26,7 +26,7 @@
 					<div style="clear: both"></div>
 				</el-card>
 			</div>
-			<div id="contentArea"></div>
+			<div class="ck-content" v-html="content" style="padding:20px"></div>
 			<div class="footer">
 				<span>{{ postTime }}</span>
 			</div>
@@ -45,18 +45,14 @@
 				<el-card v-for="comment in comments" :key="comment.commentId" style="margin-bottom: 20px">
 					<div class="comment-avatar">
 						<el-avatar :src="comment.user.userAvatar" :size="110"/>
+						<div style="text-align: center;display: inline-block;width: 110px;">
+							<span>{{ comment.user.userNickName }}</span>
+						</div>
 					</div>
 					<div v-html="comment.commentContent" class="ck-content comment-content">
 					</div>
-					<div style="text-align: center;display: inline-block;width: 110px;">
-						<span>{{ comment.user.userNickName }}</span>
-					</div>
-					<div style="vertical-align: top;display: inline-block;float:right;" v-show="isManager">
-						<el-button type="text" icon="el-icon-delete"
-								   @click="deleteComment(comment.commentId)"></el-button>
-					</div>
-					<div style="vertical-align: top; display: inline-block; float: right;padding-right: 12px">
-						<el-button type="text">回复</el-button>
+					<div style="vertical-align: top;float:right;" v-show="isManager">
+						<el-button type="text" icon="el-icon-delete" @click="deleteComment(comment.commentId)"></el-button>
 					</div>
 					<div
 						style="vertical-align: top; display: inline-block; float: right;padding-right: 12px;padding-top: 12px;font-size: 14px">
@@ -72,7 +68,6 @@
 </template>
 
 <script>
-import ClassicEditor from "@/components/in-editor/core/ckeditor";
 import CkEditor from "@/components/publicComponents/CkEditor";
 
 export default {
@@ -85,15 +80,13 @@ export default {
 			bookRate: 0,
 			infoHeight: 0,
 			comment: '',
-			preId: -1,
 			comments: [],
-			isManager: false
+			isManager: false,
 		}
 	},
 	components: {
 		CkEditor,
 		// eslint-disable-next-line
-		ClassicEditor
 	},
 	filters: {
 		ellipsis(val) {
@@ -108,38 +101,25 @@ export default {
 	},
 	mounted() {
 		this.loadReporter()
+
 		this.$nextTick(() => {
 			setTimeout(() => {
 				const cover = this.$refs.cover
 				this.infoHeight = cover.offsetHeight + 'px'
 			}, 300)
 		})
-		this.loadComment()
 		if (this.$store.getters.isLogin) {
 			this.$axios
-				.post('/auth/authBackStage')
+				.post('/auth/authComment')
 				.then(r => {
 					if (r.data.code === 1) {
 						this.isManager = true
 					}
 				})
 		}
+		this.loadComment()
 	},
 	methods: {
-		initCkEditor(content) {
-			ClassicEditor
-				.create(document.querySelector('#contentArea'))
-				.then(editor => {
-					editor.isReadOnly = true;
-					editor.setData(content);
-				})
-				.catch(r => {
-					this.$message.error(r)
-				})
-		},
-		initCommenter() {
-
-		},
 		loadReporter() {
 			let _this = this;
 			let reporterId = this.$route.params.reporterId
@@ -151,7 +131,6 @@ export default {
 						_this.postTime = "发布时间：" + r.data.data.postTime
 						_this.content = _this.unescapeHtml(r.data.data.reporterContent);
 						_this.bookRate = r.data.data.bookRate
-						this.initCkEditor(_this.content);
 					}
 				});
 		},
@@ -163,7 +142,6 @@ export default {
 				.post('/comment', {
 					commentContent: _this.comment,
 					commentAuthorId: localStorage.getItem("userId"),
-					commentPreId: _this.preId,
 					status: 1,
 					contentId: this.$route.params.reporterId
 				})
@@ -192,11 +170,12 @@ export default {
 			this.$axios
 				.delete('/comment/' + val)
 				.then(r => {
-					if(r.data.code===1){
+					if (r.data.code === 1) {
 						_this.$message.success("删除成功")
 						_this.$router.go(0)
 					}
 				})
+			_this.visible = false
 		}
 	}
 }

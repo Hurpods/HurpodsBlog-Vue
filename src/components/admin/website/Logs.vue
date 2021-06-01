@@ -3,25 +3,26 @@
 		<el-card class="c1">
 			<div slot="header" class="clearfix">
 				<span>日志记录</span>
-				<el-button style="float: right; padding: 3px 0;font-size: 15px" type="text" @click="deleteAll">清空日志</el-button>
+				<el-button style="float: right; padding: 3px 0;font-size: 15px" type="text" @click="deleteAll">清空日志
+				</el-button>
 			</div>
-			<el-scrollbar>
-				<el-card v-for="log in logs" :key="log" style="margin-bottom: 20px;">
-					<i class="el-icon-document" style="font-size: 16px;width: 51%">{{ log }}</i>
-					<el-button type="primary" icon="el-icon-reading" @click="readLog(log)">查看</el-button>
-					<el-button type="danger" icon="el-icon-delete" @click="deleteLog(log)">删除</el-button>
-				</el-card>
+			<el-scrollbar wrap-class="list">
+				<div>
+					<el-card v-for="log in logs" :key="log" style="margin-bottom: 20px;">
+						<i class="el-icon-document" style="font-size: 16px;width: 51%">{{ log }}</i>
+						<el-button type="primary" icon="el-icon-reading" @click="readLog(log)">查看</el-button>
+						<el-button type="danger" icon="el-icon-delete" @click="deleteLog(log)">删除</el-button>
+					</el-card>
+				</div>
 			</el-scrollbar>
-
 		</el-card>
 		<el-card class="c2">
 			<div slot="header" class="clearfix">
 				<span>{{ date }}</span>
 			</div>
-			<el-scrollbar style="height: 100%">
-				<div id="contentArea"></div>
+			<el-scrollbar wrap-class="list">
+				<div class="ck-content" v-html="content" style="overflow: auto"></div>
 			</el-scrollbar>
-
 		</el-card>
 	</div>
 </template>
@@ -46,17 +47,6 @@ export default {
 		this.readList()
 	},
 	methods: {
-		initCkEditor(content) {
-			ClassicEditor
-				.create(document.querySelector('#contentArea'))
-				.then(editor => {
-					editor.isReadOnly = true;
-					editor.setData(content);
-				})
-				.catch(r => {
-					this.$message.error(r)
-				})
-		},
 		readLog(v) {
 			let _this = this;
 			const val = v.replace("年", "").replace("月", "").replace("日", "")
@@ -66,7 +56,6 @@ export default {
 					if (r.data.code === 1) {
 						_this.date = v
 						_this.content = r.data.data
-						_this.initCkEditor(_this.content)
 					}
 				})
 		},
@@ -85,7 +74,7 @@ export default {
 					}
 				})
 		},
-		deleteLog(v){
+		deleteLog(v) {
 
 			let _this = this;
 			const val = v.replace("年", "").replace("月", "").replace("日", "")
@@ -98,7 +87,7 @@ export default {
 					}
 				})
 		},
-		deleteAll(){
+		deleteAll() {
 			this.$confirm('此操作将永久删除该文件, 是否继续?', '提示', {
 				confirmButtonText: '确定',
 				cancelButtonText: '取消',
@@ -120,17 +109,8 @@ export default {
 </script>
 
 <style>
-.ck .ck-reset_all {
-	display: none !important;
-}
-
-.ck .ck-content {
-	border: 0 !important;
-	background-color: RGBA(255, 255, 255, 0);
-}
-
-.ck-editor__editable {
-	max-height: 910px;
+.list{
+	max-height: 845px;
 }
 
 .c1 {
