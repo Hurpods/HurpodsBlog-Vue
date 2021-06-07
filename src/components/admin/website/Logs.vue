@@ -79,7 +79,7 @@ export default {
 			let _this = this;
 			const val = v.replace("年", "").replace("月", "").replace("日", "")
 			this.$axios
-				.delete('/api/backStage/logs/' + val)
+				.delete('/api/backStage/log/' + val)
 				.then(r => {
 					if (r.data.code === 1) {
 						_this.$message.success("删除成功")
@@ -88,15 +88,24 @@ export default {
 				})
 		},
 		deleteAll() {
-			this.$confirm('此操作将永久删除该文件, 是否继续?', '提示', {
+			this.$confirm('此操作将永久删除所有日志文件, 是否继续?', '提示', {
 				confirmButtonText: '确定',
 				cancelButtonText: '取消',
 				type: 'warning'
 			}).then(() => {
-				this.$message({
-					type: 'success',
-					message: '删除成功!'
-				});
+				this.$axios
+					.delete('/api/backStage/logs')
+					.then(r => {
+						if (r.data.code === 1) {
+							this.$message({
+								type: 'success',
+								message: '删除成功!'
+							});
+						} else {
+							this.$message.error(r.data.message);
+						}
+					})
+
 			}).catch(() => {
 				this.$message({
 					type: 'info',
@@ -109,7 +118,7 @@ export default {
 </script>
 
 <style>
-.list{
+.list {
 	max-height: 845px;
 }
 

@@ -38,9 +38,7 @@
         data() {
             return {
                 navList: [
-                    {index: '/', navItem: '首页'},
-                    {index: '/articles', navItem: '全部文章'},
-                    {index: '/library', navItem: '图书馆'}
+                    {index: '/', navItem: '首页'}
                 ],
                 baseCommand: [],
                 avatarUrl: "",

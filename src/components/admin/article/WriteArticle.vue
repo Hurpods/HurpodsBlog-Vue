@@ -43,7 +43,7 @@
 				:on-exceed="handleExceed"
 			>
 				<i class="el-icon-upload"></i>
-				<div class="el-upload__text">将文件拖到此处，或<em>点击上传</em></div>
+				<div class="el-upload__text">将文件拖到此处，或<em>点击上传</em>（不上传则使用默认封面）</div>
 			</el-upload>
 			<span
 				slot="footer"
